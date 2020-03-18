@@ -2,6 +2,53 @@ from django.db import models
 from django.urls import reverse
 
 
+class Expert(models.Model):
+
+    # Relationships
+    user = models.OneToOneField("auth.User")
+    category = models.ManyToManyField("fake-checker.Category")
+
+    # Fields
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    profile_pic = models.URLField()
+    about = models.TextField()
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_absolute_url(self):
+        return reverse("fake-checker_Expert_detail", args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse("fake-checker_Expert_update", args=(self.pk,))
+
+
+class Redactor(models.Model):
+
+    # Relationships
+    user = models.OneToOneField("auth.User")
+
+    # Fields
+    phone_number = models.TextField(max_length=12)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_absolute_url(self):
+        return reverse("fake-checker_Redactor_detail", args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse("fake-checker_Redactor_update", args=(self.pk,))
+
+
 class QuestionCollection(models.Model):
 
     # Relationships
@@ -33,7 +80,7 @@ class Review(models.Model):
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     justification = models.TextField()
-    is_legit = models.BinaryField()
+    is_info_fake = models.BooleanField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
     sources = models.TextField()
 
@@ -93,49 +140,6 @@ class Question(models.Model):
 
     def get_update_url(self):
         return reverse("fake-checker_Question_update", args=(self.pk,))
-
-
-class Expert(AbstractUser):
-
-    # Relationships
-    category = models.ManyToManyField("fake-checker.Category")
-
-    # Fields
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
-    profile_pic = models.URLField()
-    about = models.TextField()
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return str(self.pk)
-
-    def get_absolute_url(self):
-        return reverse("fake-checker_Expert_detail", args=(self.pk,))
-
-    def get_update_url(self):
-        return reverse("fake-checker_Expert_update", args=(self.pk,))
-
-
-class Redactor(AbstractUser):
-
-    # Fields
-    phone_number = models.TextField(max_length=12)
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return str(self.pk)
-
-    def get_absolute_url(self):
-        return reverse("fake-checker_Redactor_detail", args=(self.pk,))
-
-    def get_update_url(self):
-        return reverse("fake-checker_Redactor_update", args=(self.pk,))
 
 
 class QuestionFromUser(Question):

@@ -4,6 +4,22 @@ from . import serializers
 from . import models
 
 
+class ExpertViewSet(viewsets.ModelViewSet):
+    """ViewSet for the Expert class"""
+
+    queryset = models.Expert.objects.all()
+    serializer_class = serializers.ExpertSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class RedactorViewSet(viewsets.ModelViewSet):
+    """ViewSet for the Redactor class"""
+
+    queryset = models.Redactor.objects.all()
+    serializer_class = serializers.RedactorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class QuestionCollectionViewSet(viewsets.ModelViewSet):
     """ViewSet for the QuestionCollection class"""
 
@@ -33,22 +49,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class ExpertViewSet(viewsets.ModelViewSet):
-    """ViewSet for the Expert class"""
-
-    queryset = models.Expert.objects.all()
-    serializer_class = serializers.ExpertSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class RedactorViewSet(viewsets.ModelViewSet):
-    """ViewSet for the Redactor class"""
-
-    queryset = models.Redactor.objects.all()
-    serializer_class = serializers.RedactorSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 

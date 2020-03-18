@@ -59,6 +59,23 @@ def create_ContentType(**kwargs):
     return ContentType.objects.create(**defaults)
 
 
+def create_fake-checker_Expert(**kwargs):
+    defaults = {}
+    defaults["profile_pic"] = ""
+    defaults["about"] = ""
+    if "user" not in kwargs:
+        defaults["user"] = create_User()
+    if "category" not in kwargs:
+        defaults["category"] = create_fake-checker_Category()
+    defaults.update(**kwargs)
+    return fake-checker_models.Expert.objects.create(**defaults)
+def create_fake-checker_Redactor(**kwargs):
+    defaults = {}
+    defaults["phone_number"] = ""
+    if "user" not in kwargs:
+        defaults["user"] = create_User()
+    defaults.update(**kwargs)
+    return fake-checker_models.Redactor.objects.create(**defaults)
 def create_fake-checker_QuestionCollection(**kwargs):
     defaults = {}
     defaults["name"] = ""
@@ -69,7 +86,7 @@ def create_fake-checker_QuestionCollection(**kwargs):
 def create_fake-checker_Review(**kwargs):
     defaults = {}
     defaults["justification"] = ""
-    defaults["is_legit"] = ""
+    defaults["is_info_fake"] = ""
     defaults["sources"] = ""
     if "question_for_expert" not in kwargs:
         defaults["question_for_expert"] = create_fake-checker_QuestionForExpert()
@@ -94,23 +111,6 @@ def create_fake-checker_Question(**kwargs):
         defaults["category"] = create_fake-checker_Category()
     defaults.update(**kwargs)
     return fake-checker_models.Question.objects.create(**defaults)
-def create_fake-checker_Expert(**kwargs):
-    defaults = {}
-    defaults["profile_pic"] = ""
-    defaults["about"] = ""
-    defaults["username"] = "username"
-    defaults["email"] = "username@tempurl.com"
-    if "category" not in kwargs:
-        defaults["category"] = create_fake-checker_Category()
-    defaults.update(**kwargs)
-    return fake-checker_models.Expert.objects.create(**defaults)
-def create_fake-checker_Redactor(**kwargs):
-    defaults = {}
-    defaults["phone_number"] = ""
-    defaults["username"] = "username"
-    defaults["email"] = "username@tempurl.com"
-    defaults.update(**kwargs)
-    return fake-checker_models.Redactor.objects.create(**defaults)
 def create_fake-checker_QuestionFromUser(**kwargs):
     defaults = {}
     defaults["is_read"] = ""

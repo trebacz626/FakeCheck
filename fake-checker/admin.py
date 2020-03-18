@@ -4,6 +4,48 @@ from django import forms
 from . import models
 
 
+class ExpertAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Expert
+        fields = "__all__"
+
+
+class ExpertAdmin(admin.ModelAdmin):
+    form = ExpertAdminForm
+    list_display = [
+        "last_updated",
+        "profile_pic",
+        "about",
+        "created",
+    ]
+    readonly_fields = [
+        "last_updated",
+        "profile_pic",
+        "about",
+        "created",
+    ]
+
+
+class RedactorAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Redactor
+        fields = "__all__"
+
+
+class RedactorAdmin(admin.ModelAdmin):
+    form = RedactorAdminForm
+    list_display = [
+        "phone_number",
+        "created",
+    ]
+    readonly_fields = [
+        "phone_number",
+        "created",
+    ]
+
+
 class QuestionCollectionAdminForm(forms.ModelForm):
 
     class Meta:
@@ -35,14 +77,14 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = [
         "last_updated",
         "justification",
-        "is_legit",
+        "is_info_fake",
         "created",
         "sources",
     ]
     readonly_fields = [
         "last_updated",
         "justification",
-        "is_legit",
+        "is_info_fake",
         "created",
         "sources",
     ]
@@ -86,48 +128,6 @@ class QuestionAdmin(admin.ModelAdmin):
     ]
 
 
-class ExpertAdminForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Expert
-        fields = "__all__"
-
-
-class ExpertAdmin(admin.ModelAdmin):
-    form = ExpertAdminForm
-    list_display = [
-        "last_updated",
-        "profile_pic",
-        "about",
-        "created",
-    ]
-    readonly_fields = [
-        "last_updated",
-        "profile_pic",
-        "about",
-        "created",
-    ]
-
-
-class RedactorAdminForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Redactor
-        fields = "__all__"
-
-
-class RedactorAdmin(admin.ModelAdmin):
-    form = RedactorAdminForm
-    list_display = [
-        "phone_number",
-        "created",
-    ]
-    readonly_fields = [
-        "phone_number",
-        "created",
-    ]
-
-
 class QuestionFromUserAdminForm(forms.ModelForm):
 
     class Meta:
@@ -160,11 +160,11 @@ class QuestionForExpertAdmin(admin.ModelAdmin):
     ]
 
 
+admin.site.register(models.Expert, ExpertAdmin)
+admin.site.register(models.Redactor, RedactorAdmin)
 admin.site.register(models.QuestionCollection, QuestionCollectionAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Question, QuestionAdmin)
-admin.site.register(models.Expert, ExpertAdmin)
-admin.site.register(models.Redactor, RedactorAdmin)
 admin.site.register(models.QuestionFromUser, QuestionFromUserAdmin)
 admin.site.register(models.QuestionForExpert, QuestionForExpertAdmin)
