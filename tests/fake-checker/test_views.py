@@ -8,6 +8,102 @@ from django.test import Client
 pytestmark = [pytest.mark.django_db]
 
 
+def tests_Expert_list_view():
+    instance1 = test_helpers.create_fake-checker_Expert()
+    instance2 = test_helpers.create_fake-checker_Expert()
+    client = Client()
+    url = reverse("fake-checker_Expert_list")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert str(instance1) in response.content.decode("utf-8")
+    assert str(instance2) in response.content.decode("utf-8")
+
+
+def tests_Expert_create_view():
+    user = test_helpers.create_User()
+    category = test_helpers.create_fake-checker_Category()
+    client = Client()
+    url = reverse("fake-checker_Expert_create")
+    data = {
+        "profile_pic": http://127.0.0.1,
+        "about": "text",
+        "user": user.pk,
+        "category": category.pk,
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+
+
+def tests_Expert_detail_view():
+    client = Client()
+    instance = test_helpers.create_fake-checker_Expert()
+    url = reverse("fake-checker_Expert_detail", args=[instance.pk, ])
+    response = client.get(url)
+    assert response.status_code == 200
+    assert str(instance) in response.content.decode("utf-8")
+
+
+def tests_Expert_update_view():
+    user = test_helpers.create_User()
+    category = test_helpers.create_fake-checker_Category()
+    client = Client()
+    instance = test_helpers.create_fake-checker_Expert()
+    url = reverse("fake-checker_Expert_update", args=[instance.pk, ])
+    data = {
+        "profile_pic": http://127.0.0.1,
+        "about": "text",
+        "user": user.pk,
+        "category": category.pk,
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+
+
+def tests_Redactor_list_view():
+    instance1 = test_helpers.create_fake-checker_Redactor()
+    instance2 = test_helpers.create_fake-checker_Redactor()
+    client = Client()
+    url = reverse("fake-checker_Redactor_list")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert str(instance1) in response.content.decode("utf-8")
+    assert str(instance2) in response.content.decode("utf-8")
+
+
+def tests_Redactor_create_view():
+    user = test_helpers.create_User()
+    client = Client()
+    url = reverse("fake-checker_Redactor_create")
+    data = {
+        "phone_number": "text",
+        "user": user.pk,
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+
+
+def tests_Redactor_detail_view():
+    client = Client()
+    instance = test_helpers.create_fake-checker_Redactor()
+    url = reverse("fake-checker_Redactor_detail", args=[instance.pk, ])
+    response = client.get(url)
+    assert response.status_code == 200
+    assert str(instance) in response.content.decode("utf-8")
+
+
+def tests_Redactor_update_view():
+    user = test_helpers.create_User()
+    client = Client()
+    instance = test_helpers.create_fake-checker_Redactor()
+    url = reverse("fake-checker_Redactor_update", args=[instance.pk, ])
+    data = {
+        "phone_number": "text",
+        "user": user.pk,
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+
+
 def tests_QuestionCollection_list_view():
     instance1 = test_helpers.create_fake-checker_QuestionCollection()
     instance2 = test_helpers.create_fake-checker_QuestionCollection()
@@ -71,7 +167,7 @@ def tests_Review_create_view():
     url = reverse("fake-checker_Review_create")
     data = {
         "justification": "text",
-        "is_legit": b'bytes',
+        "is_info_fake": true,
         "sources": "text",
         "question_for_expert": question_for_expert.pk,
         "expert": expert.pk,
@@ -97,7 +193,7 @@ def tests_Review_update_view():
     url = reverse("fake-checker_Review_update", args=[instance.pk, ])
     data = {
         "justification": "text",
-        "is_legit": b'bytes',
+        "is_info_fake": true,
         "sources": "text",
         "question_for_expert": question_for_expert.pk,
         "expert": expert.pk,
@@ -197,94 +293,6 @@ def tests_Question_update_view():
         "content": "text",
         "sources": "text",
         "category": category.pk,
-    }
-    response = client.post(url, data)
-    assert response.status_code == 302
-
-
-def tests_Expert_list_view():
-    instance1 = test_helpers.create_fake-checker_Expert()
-    instance2 = test_helpers.create_fake-checker_Expert()
-    client = Client()
-    url = reverse("fake-checker_Expert_list")
-    response = client.get(url)
-    assert response.status_code == 200
-    assert str(instance1) in response.content.decode("utf-8")
-    assert str(instance2) in response.content.decode("utf-8")
-
-
-def tests_Expert_create_view():
-    category = test_helpers.create_fake-checker_Category()
-    client = Client()
-    url = reverse("fake-checker_Expert_create")
-    data = {
-        "profile_pic": http://127.0.0.1,
-        "about": "text",
-        "category": category.pk,
-    }
-    response = client.post(url, data)
-    assert response.status_code == 302
-
-
-def tests_Expert_detail_view():
-    client = Client()
-    instance = test_helpers.create_fake-checker_Expert()
-    url = reverse("fake-checker_Expert_detail", args=[instance.pk, ])
-    response = client.get(url)
-    assert response.status_code == 200
-    assert str(instance) in response.content.decode("utf-8")
-
-
-def tests_Expert_update_view():
-    category = test_helpers.create_fake-checker_Category()
-    client = Client()
-    instance = test_helpers.create_fake-checker_Expert()
-    url = reverse("fake-checker_Expert_update", args=[instance.pk, ])
-    data = {
-        "profile_pic": http://127.0.0.1,
-        "about": "text",
-        "category": category.pk,
-    }
-    response = client.post(url, data)
-    assert response.status_code == 302
-
-
-def tests_Redactor_list_view():
-    instance1 = test_helpers.create_fake-checker_Redactor()
-    instance2 = test_helpers.create_fake-checker_Redactor()
-    client = Client()
-    url = reverse("fake-checker_Redactor_list")
-    response = client.get(url)
-    assert response.status_code == 200
-    assert str(instance1) in response.content.decode("utf-8")
-    assert str(instance2) in response.content.decode("utf-8")
-
-
-def tests_Redactor_create_view():
-    client = Client()
-    url = reverse("fake-checker_Redactor_create")
-    data = {
-        "phone_number": "text",
-    }
-    response = client.post(url, data)
-    assert response.status_code == 302
-
-
-def tests_Redactor_detail_view():
-    client = Client()
-    instance = test_helpers.create_fake-checker_Redactor()
-    url = reverse("fake-checker_Redactor_detail", args=[instance.pk, ])
-    response = client.get(url)
-    assert response.status_code == 200
-    assert str(instance) in response.content.decode("utf-8")
-
-
-def tests_Redactor_update_view():
-    client = Client()
-    instance = test_helpers.create_fake-checker_Redactor()
-    url = reverse("fake-checker_Redactor_update", args=[instance.pk, ])
-    data = {
-        "phone_number": "text",
     }
     response = client.post(url, data)
     assert response.status_code == 302

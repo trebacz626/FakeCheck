@@ -3,6 +3,48 @@ from . import models
 from . import forms
 
 
+class ExpertListView(generic.ListView):
+    model = models.Expert
+    form_class = forms.ExpertForm
+
+
+class ExpertCreateView(generic.CreateView):
+    model = models.Expert
+    form_class = forms.ExpertForm
+
+
+class ExpertDetailView(generic.DetailView):
+    model = models.Expert
+    form_class = forms.ExpertForm
+
+
+class ExpertUpdateView(generic.UpdateView):
+    model = models.Expert
+    form_class = forms.ExpertForm
+    pk_url_kwarg = "pk"
+
+
+class RedactorListView(generic.ListView):
+    model = models.Redactor
+    form_class = forms.RedactorForm
+
+
+class RedactorCreateView(generic.CreateView):
+    model = models.Redactor
+    form_class = forms.RedactorForm
+
+
+class RedactorDetailView(generic.DetailView):
+    model = models.Redactor
+    form_class = forms.RedactorForm
+
+
+class RedactorUpdateView(generic.UpdateView):
+    model = models.Redactor
+    form_class = forms.RedactorForm
+    pk_url_kwarg = "pk"
+
+
 class QuestionCollectionListView(generic.ListView):
     model = models.QuestionCollection
     form_class = forms.QuestionCollectionForm
@@ -84,48 +126,6 @@ class QuestionDetailView(generic.DetailView):
 class QuestionUpdateView(generic.UpdateView):
     model = models.Question
     form_class = forms.QuestionForm
-    pk_url_kwarg = "pk"
-
-
-class ExpertListView(generic.ListView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-
-
-class ExpertCreateView(generic.CreateView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-
-
-class ExpertDetailView(generic.DetailView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-
-
-class ExpertUpdateView(generic.UpdateView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-    pk_url_kwarg = "pk"
-
-
-class RedactorListView(generic.ListView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
-
-
-class RedactorCreateView(generic.CreateView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
-
-
-class RedactorDetailView(generic.DetailView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
-
-
-class RedactorUpdateView(generic.UpdateView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
     pk_url_kwarg = "pk"
 
 

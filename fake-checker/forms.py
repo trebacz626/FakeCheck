@@ -2,6 +2,26 @@ from django import forms
 from . import models
 
 
+class ExpertForm(forms.ModelForm):
+    class Meta:
+        model = models.Expert
+        fields = [
+            "profile_pic",
+            "about",
+            "user",
+            "category",
+        ]
+
+
+class RedactorForm(forms.ModelForm):
+    class Meta:
+        model = models.Redactor
+        fields = [
+            "phone_number",
+            "user",
+        ]
+
+
 class QuestionCollectionForm(forms.ModelForm):
     class Meta:
         model = models.QuestionCollection
@@ -16,7 +36,7 @@ class ReviewForm(forms.ModelForm):
         model = models.Review
         fields = [
             "justification",
-            "is_legit",
+            "is_info_fake",
             "sources",
             "question_for_expert",
             "expert",
@@ -40,24 +60,6 @@ class QuestionForm(forms.ModelForm):
             "content",
             "sources",
             "category",
-        ]
-
-
-class ExpertForm(forms.ModelForm):
-    class Meta:
-        model = models.Expert
-        fields = [
-            "profile_pic",
-            "about",
-            "category",
-        ]
-
-
-class RedactorForm(forms.ModelForm):
-    class Meta:
-        model = models.Redactor
-        fields = [
-            "phone_number",
         ]
 
 

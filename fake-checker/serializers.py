@@ -3,6 +3,26 @@ from rest_framework import serializers
 from . import models
 
 
+class ExpertSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Expert
+        fields = [
+            "last_updated",
+            "profile_pic",
+            "about",
+            "created",
+        ]
+
+class RedactorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Redactor
+        fields = [
+            "phone_number",
+            "created",
+        ]
+
 class QuestionCollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -19,7 +39,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = [
             "last_updated",
             "justification",
-            "is_legit",
+            "is_info_fake",
             "created",
             "sources",
         ]
@@ -40,26 +60,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             "content",
             "created",
             "sources",
-        ]
-
-class ExpertSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Expert
-        fields = [
-            "last_updated",
-            "profile_pic",
-            "about",
-            "created",
-        ]
-
-class RedactorSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Redactor
-        fields = [
-            "phone_number",
-            "created",
         ]
 
 class QuestionFromUserSerializer(serializers.ModelSerializer):
