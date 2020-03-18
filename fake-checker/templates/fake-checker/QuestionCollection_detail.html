@@ -4,13 +4,13 @@
 {% block content %}
     
 <p>
-    <a class="btn btn-light" href="{% url 'fake-checker_Redactor_list' %}">
-    Redactor Listing
+    <a class="btn btn-light" href="{% url 'fake-checker_QuestionCollection_list' %}">
+    QuestionCollection Listing
     </a>
 </p>
     
 <table class="table">
-    <tr><td>phone_number</td><td>{{ object.phone_number }}</td></tr>
+    <tr><td>name</td><td>{{ object.name }}</td></tr>
     <tr><td>created</td><td>{{ object.created }}</td></tr>
 </table>
 <a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>

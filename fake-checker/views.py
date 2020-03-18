@@ -3,6 +3,27 @@ from . import models
 from . import forms
 
 
+class QuestionCollectionListView(generic.ListView):
+    model = models.QuestionCollection
+    form_class = forms.QuestionCollectionForm
+
+
+class QuestionCollectionCreateView(generic.CreateView):
+    model = models.QuestionCollection
+    form_class = forms.QuestionCollectionForm
+
+
+class QuestionCollectionDetailView(generic.DetailView):
+    model = models.QuestionCollection
+    form_class = forms.QuestionCollectionForm
+
+
+class QuestionCollectionUpdateView(generic.UpdateView):
+    model = models.QuestionCollection
+    form_class = forms.QuestionCollectionForm
+    pk_url_kwarg = "pk"
+
+
 class ReviewListView(generic.ListView):
     model = models.Review
     form_class = forms.ReviewForm
@@ -105,4 +126,46 @@ class RedactorDetailView(generic.DetailView):
 class RedactorUpdateView(generic.UpdateView):
     model = models.Redactor
     form_class = forms.RedactorForm
+    pk_url_kwarg = "pk"
+
+
+class QuestionFromUserListView(generic.ListView):
+    model = models.QuestionFromUser
+    form_class = forms.QuestionFromUserForm
+
+
+class QuestionFromUserCreateView(generic.CreateView):
+    model = models.QuestionFromUser
+    form_class = forms.QuestionFromUserForm
+
+
+class QuestionFromUserDetailView(generic.DetailView):
+    model = models.QuestionFromUser
+    form_class = forms.QuestionFromUserForm
+
+
+class QuestionFromUserUpdateView(generic.UpdateView):
+    model = models.QuestionFromUser
+    form_class = forms.QuestionFromUserForm
+    pk_url_kwarg = "pk"
+
+
+class QuestionForExpertListView(generic.ListView):
+    model = models.QuestionForExpert
+    form_class = forms.QuestionForExpertForm
+
+
+class QuestionForExpertCreateView(generic.CreateView):
+    model = models.QuestionForExpert
+    form_class = forms.QuestionForExpertForm
+
+
+class QuestionForExpertDetailView(generic.DetailView):
+    model = models.QuestionForExpert
+    form_class = forms.QuestionForExpertForm
+
+
+class QuestionForExpertUpdateView(generic.UpdateView):
+    model = models.QuestionForExpert
+    form_class = forms.QuestionForExpertForm
     pk_url_kwarg = "pk"

@@ -4,6 +4,14 @@ from . import serializers
 from . import models
 
 
+class QuestionCollectionViewSet(viewsets.ModelViewSet):
+    """ViewSet for the QuestionCollection class"""
+
+    queryset = models.QuestionCollection.objects.all()
+    serializer_class = serializers.QuestionCollectionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class ReviewViewSet(viewsets.ModelViewSet):
     """ViewSet for the Review class"""
 
@@ -41,4 +49,20 @@ class RedactorViewSet(viewsets.ModelViewSet):
 
     queryset = models.Redactor.objects.all()
     serializer_class = serializers.RedactorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class QuestionFromUserViewSet(viewsets.ModelViewSet):
+    """ViewSet for the QuestionFromUser class"""
+
+    queryset = models.QuestionFromUser.objects.all()
+    serializer_class = serializers.QuestionFromUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class QuestionForExpertViewSet(viewsets.ModelViewSet):
+    """ViewSet for the QuestionForExpert class"""
+
+    queryset = models.QuestionForExpert.objects.all()
+    serializer_class = serializers.QuestionForExpertSerializer
     permission_classes = [permissions.IsAuthenticated]
