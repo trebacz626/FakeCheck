@@ -5,8 +5,8 @@ from django.urls import reverse
 class Expert(models.Model):
 
     # Relationships
-    user = models.OneToOneField("auth.User")
-    category = models.ManyToManyField("fake-checker.Category")
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
+    categories = models.ManyToManyField("fake-checker.Category")
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -30,7 +30,7 @@ class Expert(models.Model):
 class Redactor(models.Model):
 
     # Relationships
-    user = models.OneToOneField("auth.User")
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
 
     # Fields
     phone_number = models.TextField(max_length=12)
@@ -52,7 +52,7 @@ class Redactor(models.Model):
 class QuestionCollection(models.Model):
 
     # Relationships
-    question_from_user = models.ManyToManyField("fake-checker.QuestionFromUser")
+    questions_from_user = models.ManyToManyField("fake-checker.QuestionFromUser")
 
     # Fields
     name = models.TextField(max_length=100)
@@ -99,10 +99,6 @@ class Review(models.Model):
 
 class Category(models.Model):
 
-    # Relationships
-    questions = models.ManyToManyField("fake-checker.Question")
-    expert = models.ManyToManyField("fake-checker.Expert")
-
     # Fields
     name = models.TextField(max_length=100)
 
@@ -122,7 +118,7 @@ class Category(models.Model):
 class Question(models.Model):
 
     # Relationships
-    category = models.ManyToManyField("fake-checker.Category")
+    categories = models.ManyToManyField("fake-checker.Category", related_name="questions")
 
     # Fields
     content = models.TextField(max_length=1000)

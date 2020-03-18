@@ -9,7 +9,7 @@ class ExpertForm(forms.ModelForm):
             "profile_pic",
             "about",
             "user",
-            "category",
+            "categories",
         ]
 
 
@@ -27,7 +27,7 @@ class QuestionCollectionForm(forms.ModelForm):
         model = models.QuestionCollection
         fields = [
             "name",
-            "question_from_user",
+            "questions_from_user",
         ]
 
 
@@ -48,8 +48,6 @@ class CategoryForm(forms.ModelForm):
         model = models.Category
         fields = [
             "name",
-            "questions",
-            "expert",
         ]
 
 
@@ -59,7 +57,7 @@ class QuestionForm(forms.ModelForm):
         fields = [
             "content",
             "sources",
-            "category",
+            "categories",
         ]
 
 
