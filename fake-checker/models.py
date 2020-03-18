@@ -1,16 +1,41 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import AbstractUser
+
+
+class QuestionCollection(models.Model):
+
+    # Relationships
+    question_from_user = models.ManyToManyField("fake-checker.QuestionFromUser")
+
+    # Fields
+    name = models.TextField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return str(self.name)
+
+    def get_absolute_url(self):
+        return reverse("fake-checker_QuestionCollection_detail", args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse("fake-checker_QuestionCollection_update", args=(self.pk,))
+
 
 class Review(models.Model):
 
     # Relationships
-    question = models.ForeignKey("fake-checker.Question", on_delete=models.CASCADE)
+    question_for_expert = models.ForeignKey("fake-checker.QuestionForExpert", on_delete=models.CASCADE)
     expert = models.ForeignKey("fake-checker.Expert", on_delete=models.CASCADE)
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
+    justification = models.TextField()
+    is_legit = models.BinaryField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    sources = models.TextField()
 
     class Meta:
         pass
@@ -32,14 +57,13 @@ class Category(models.Model):
     expert = models.ManyToManyField("fake-checker.Expert")
 
     # Fields
-    created = models.DateTimeField(auto_now_add=True, editable=False)
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    name = models.TextField(max_length=100)
 
     class Meta:
         pass
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.name)
 
     def get_absolute_url(self):
         return reverse("fake-checker_Category_detail", args=(self.pk,))
@@ -52,11 +76,11 @@ class Question(models.Model):
 
     # Relationships
     category = models.ManyToManyField("fake-checker.Category")
-    redactor = models.ForeignKey("fake-checker.Redactor", on_delete=models.CASCADE)
 
     # Fields
+    content = models.TextField(max_length=1000)
     created = models.DateTimeField(auto_now_add=True, editable=False)
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    sources = models.TextField()
 
     class Meta:
         pass
@@ -78,6 +102,8 @@ class Expert(AbstractUser):
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
+    profile_pic = models.URLField()
+    about = models.TextField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
@@ -96,7 +122,7 @@ class Expert(AbstractUser):
 class Redactor(AbstractUser):
 
     # Fields
-    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    phone_number = models.TextField(max_length=12)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
     class Meta:
@@ -110,3 +136,39 @@ class Redactor(AbstractUser):
 
     def get_update_url(self):
         return reverse("fake-checker_Redactor_update", args=(self.pk,))
+
+
+class QuestionFromUser(Question):
+
+    # Fields
+    is_read = models.BooleanField()
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_absolute_url(self):
+        return reverse("fake-checker_QuestionFromUser_detail", args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse("fake-checker_QuestionFromUser_update", args=(self.pk,))
+
+
+class QuestionForExpert(Question):
+
+    # Relationships
+    redactor = models.ForeignKey("fake-checker.Redactor", on_delete=models.CASCADE)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_absolute_url(self):
+        return reverse("fake-checker_QuestionForExpert_detail", args=(self.pk,))
+
+    def get_update_url(self):
+        return reverse("fake-checker_QuestionForExpert_update", args=(self.pk,))

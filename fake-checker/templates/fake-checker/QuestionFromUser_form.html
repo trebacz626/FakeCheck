@@ -1,0 +1,21 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    
+<p>
+    <a class="btn btn-light" href="{% url 'fake-checker_QuestionFromUser_list' %}">
+    QuestionFromUser Listing
+    </a>
+</p>
+    
+<form method="post">
+{% csrf_token %}
+  <div class="form-group row">
+  <label class="col-sm-2 col-form-label" for="is_read">is_read: </label>
+  <input class="form-control col-sm-10" id="is_read" type="text" name="is_read" value="{{ object.is_read }}">
+  </div>
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+
+{% endblock %}

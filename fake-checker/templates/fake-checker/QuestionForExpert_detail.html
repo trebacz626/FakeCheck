@@ -4,13 +4,12 @@
 {% block content %}
     
 <p>
-    <a class="btn btn-light" href="{% url 'fake-checker_Category_list' %}">
-    Category Listing
+    <a class="btn btn-light" href="{% url 'fake-checker_QuestionForExpert_list' %}">
+    QuestionForExpert Listing
     </a>
 </p>
     
 <table class="table">
-    <tr><td>name</td><td>{{ object.name }}</td></tr>
 </table>
 <a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
 

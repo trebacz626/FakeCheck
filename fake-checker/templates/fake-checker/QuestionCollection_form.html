@@ -4,16 +4,16 @@
 {% block content %}
     
 <p>
-    <a class="btn btn-light" href="{% url 'fake-checker_Redactor_list' %}">
-    Redactor Listing
+    <a class="btn btn-light" href="{% url 'fake-checker_QuestionCollection_list' %}">
+    QuestionCollection Listing
     </a>
 </p>
     
 <form method="post">
 {% csrf_token %}
   <div class="form-group row">
-  <label class="col-sm-2 col-form-label" for="phone_number">phone_number: </label>
-  <input class="form-control col-sm-10" id="phone_number" type="text" name="phone_number" value="{{ object.phone_number }}">
+  <label class="col-sm-2 col-form-label" for="name">name: </label>
+  <input class="form-control col-sm-10" id="name" type="text" name="name" value="{{ object.name }}">
   </div>
   <div class="form-group row">
   <label class="col-sm-2 col-form-label" for="created">created: </label>
