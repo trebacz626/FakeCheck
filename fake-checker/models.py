@@ -100,7 +100,7 @@ class Review(models.Model):
 class Category(models.Model):
 
     # Fields
-    name = models.TextField(max_length=100)
+    name = models.TextField(max_length=100, primary_key=True)
 
     class Meta:
         pass
@@ -130,7 +130,7 @@ class Question(models.Model):
         pass
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.title)
 
     def get_absolute_url(self):
         return reverse("fake-checker_Question_detail", args=(self.pk,))
@@ -148,7 +148,7 @@ class QuestionFromUser(Question):
         pass
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.title)
 
     def get_absolute_url(self):
         return reverse("fake-checker_QuestionFromUser_detail", args=(self.pk,))
@@ -166,7 +166,7 @@ class QuestionForExpert(Question):
         pass
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.title)
 
     def get_absolute_url(self):
         return reverse("fake-checker_QuestionForExpert_detail", args=(self.pk,))
