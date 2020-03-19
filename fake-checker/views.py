@@ -157,6 +157,7 @@ class QuestionFromUserListView(generic.ListView):
             new_context = new_context.order_by('title')
         elif order == 'Od najstarszego':
             new_context = new_context.order_by('-title')
+
         else:
             category_id = models.Category.fi
             new_context = new_context.order_by('categories')
