@@ -1,0 +1,10 @@
+.footer {
+  position: relative;
+  margin-top: -$footerHeight;
+  height: $footerHeight;
+  clear:both;
+  padding-top:20px;
+  color: $light;
+  text-align: center;
+  background-color: darken($dark, 15);
+}

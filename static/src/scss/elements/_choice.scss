@@ -1,0 +1,38 @@
+$width: 50px;
+$height: 26px;
+$ballsize: $height - 6px; // diameter
+
+.choice {
+  cursor: pointer;
+
+  .current-choice-label {
+    padding-left: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+  }
+
+  .choice-outline {
+    width: $width;
+    height: $height;
+    padding-left: 2px;
+    padding-top: $height/13;
+    border-radius: 15px;
+    border: black solid 1px;
+    display: inline-block;
+    background-color: $danger;
+    transition: padding-left ease-in-out 0.2s, background-color ease-in-out 0.2s;
+  }
+
+  &.second-choice .choice-outline {
+    background-color: $success;
+    padding-left: $width - $ballsize - 6px;
+  }
+
+  .choice-ball {
+    width: $ballsize;
+    height: $ballsize;
+    background: white;
+    border-radius: ($ballsize) / 2;
+  }
+}
