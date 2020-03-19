@@ -1,14 +1,20 @@
 {% load static %}
 <html>
   <head>
-    <title>Django Builder - FakeChecker</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>{% block tiltle %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <script>
+        const csrf = '{{ csrf_token }}';
+    </script>
   </head>
   <body>
-    <div id="content" class="container">
-      <h2><a href="{% url 'index' %}">FakeChecker</a></h2>
-      {% block content %}{% endblock %}
+    {% include 'common/includes/navbar.html' %}
+    <div class="wrap" id="app">
+        <div class="container-fluid main-container">
+            {% block content %} {% endblock %}
+        </div>
     </div>
+    {% include 'common/includes/footer.html' %}
   </body>
 </html>
