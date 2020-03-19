@@ -4,7 +4,6 @@ from . import models
 
 
 class ExpertSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.Expert
         fields = [
@@ -14,8 +13,8 @@ class ExpertSerializer(serializers.ModelSerializer):
             "created",
         ]
 
-class RedactorSerializer(serializers.ModelSerializer):
 
+class RedactorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Redactor
         fields = [
@@ -23,8 +22,8 @@ class RedactorSerializer(serializers.ModelSerializer):
             "created",
         ]
 
-class QuestionCollectionSerializer(serializers.ModelSerializer):
 
+class QuestionCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.QuestionCollection
         fields = [
@@ -32,8 +31,8 @@ class QuestionCollectionSerializer(serializers.ModelSerializer):
             "created",
         ]
 
-class ReviewSerializer(serializers.ModelSerializer):
 
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
         fields = [
@@ -44,34 +43,35 @@ class ReviewSerializer(serializers.ModelSerializer):
             "sources",
         ]
 
-class CategorySerializer(serializers.ModelSerializer):
 
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = [
             "name",
         ]
 
-class QuestionSerializer(serializers.ModelSerializer):
 
+class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Question
         fields = [
+            "title"
             "content",
             "created",
             "sources",
         ]
 
-class QuestionFromUserSerializer(serializers.ModelSerializer):
 
+class QuestionFromUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.QuestionFromUser
         fields = [
             "is_read",
         ]
 
-class QuestionForExpertSerializer(serializers.ModelSerializer):
 
+class QuestionForExpertSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.QuestionForExpert
         fields = [
