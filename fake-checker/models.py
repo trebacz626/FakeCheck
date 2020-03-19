@@ -121,6 +121,7 @@ class Question(models.Model):
     categories = models.ManyToManyField("fake-checker.Category", related_name="questions")
 
     # Fields
+    title = models.TextField(max_length=180)
     content = models.TextField(max_length=1000)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     sources = models.TextField()
