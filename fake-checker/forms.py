@@ -55,7 +55,7 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = models.Question
         fields = [
-            "title"
+            "title",
             "content",
             "sources",
             "categories",
