@@ -4,18 +4,18 @@
     <form method="get" action="{% url 'fake-checker_QuestionFromUser_list' %}">
     <select name="order">
     {%  for order in orders %}
-        <option value="{{ order }}">{{ order }}</option>
+        <option value="{{ order }}"  {% if order == prev_order %}selected{% endif %}>{{ order }}</option>
     {% endfor %}
     </select>
-    <select name="is_read_filter">
+    <select name="read">
     {%  for option in is_read %}
-        <option value="{{ option }}">{{ option }}</option>
+        <option value="{{ option }}" {% if option == prev_read %}selected{% endif %} >{{ option }}</option>
     {% endfor %}
     </select>
-    <select name="category_filter">
+    <select name="category">
     <option value="{{ '' }}">{{ '' }}</option>
     {%  for category in categories %}
-        <option value="{{ category.name }}">{{ category.name }}</option>
+        <option value="{{ category.name }}" {% if category.name == prev_category %}selected{% endif %}>{{ category.name }}</option>
     {% endfor %}
     </select>
     <p><input type="submit" name="submit" value="submit"/></p>

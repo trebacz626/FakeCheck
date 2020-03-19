@@ -139,32 +139,32 @@ class QuestionFromUserListView(generic.ListView):
     template_name = 'fake-checker/question_from_user_list.html'
 
     def get_queryset(self):
-        category = self.request.GET.get('category_filter', '')
-        is_read = self.request.GET.get('is_read_filter', '')
+        category = self.request.GET.get('category', '')
+        is_read = self.request.GET.get('read', '')
         order = self.request.GET.get('order', 'created')
 
         new_context = models.QuestionFromUser.objects.all()
-        print(new_context)
         if category != '':
-            new_context = new_context.filter(categories=category)
+            new_context = new_context.filter(categories__in=[category])
 
         if is_read == 'Tylko nowe':
-            new_context = new_context.filter(is_read=True)
-        elif is_read == 'Tylko przeczytane':
             new_context = new_context.filter(is_read=False)
+        elif is_read == 'Tylko przeczytane':
+            new_context = new_context.filter(is_read=True)
 
         if order == 'Od najnowszego':
-            new_context = new_context.order_by('title')
+            new_context = new_context.order_by('created')
         elif order == 'Od najstarszego':
-            new_context = new_context.order_by('-title')
-        else:
-            new_context = new_context.order_by('categories')
-        print(new_context)
+            new_context = new_context.order_by('-created')
+
         return new_context
 
     def get_context_data(self, **kwargs):
         context = super(QuestionFromUserListView, self).get_context_data(**kwargs)
-        context['orders'] = ('Od najnowszego', 'Od najstarszego', 'Według kategorii')
+        context['prev_order'] = self.request.GET.get('order', 'created')
+        context['prev_read'] = self.request.GET.get('read', '')
+        context['prev_category'] = self.request.GET.get('category', '')
+        context['orders'] = ('Od najnowszego', 'Od najstarszego')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
         return context

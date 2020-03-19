@@ -100,7 +100,7 @@ class Review(models.Model):
 class Category(models.Model):
 
     # Fields
-    name = models.TextField(max_length=100)
+    name = models.TextField(max_length=100, primary_key=True)
 
     class Meta:
         pass
