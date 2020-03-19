@@ -138,6 +138,38 @@ class QuestionFromUserListView(generic.ListView):
     form_class = forms.QuestionFromUserForm
     template_name = 'fake-checker/question_from_user_list.html'
 
+    def get_queryset(self):
+        category = self.request.GET.get('category_filter', '')
+        is_read = self.request.GET.get('is_read_filter', '')
+        order = self.request.GET.get('order', 'created')
+
+        new_context = models.QuestionFromUser.objects.all()
+        print(new_context)
+        if category != '':
+            new_context = new_context.filter(categories=category)
+
+        if is_read == 'Tylko nowe':
+            new_context = new_context.filter(is_read=True)
+        elif is_read == 'Tylko przeczytane':
+            new_context = new_context.filter(is_read=False)
+
+        if order == 'Od najnowszego':
+            new_context = new_context.order_by('title')
+        elif order == 'Od najstarszego':
+            new_context = new_context.order_by('-title')
+        else:
+            category_id = models.Category.fi
+            new_context = new_context.order_by('categories')
+        print(new_context)
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionFromUserListView, self).get_context_data(**kwargs)
+        context['orders'] = ('Od najnowszego', 'Od najstarszego', 'Według kategorii')
+        context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
+        context['categories'] = models.Category.objects.all()
+        return context
+
 
 class QuestionFromUserCreateView(generic.CreateView):
     model = models.QuestionFromUser

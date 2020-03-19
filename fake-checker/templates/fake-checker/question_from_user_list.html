@@ -1,6 +1,25 @@
 
 {% extends "base.html" %}
 {% block content %}
+    <form method="get" action="{% url 'fake-checker_QuestionFromUser_list' %}">
+    <select name="order">
+    {%  for order in orders %}
+        <option value="{{ order }}">{{ order }}</option>
+    {% endfor %}
+    </select>
+    <select name="is_read_filter">
+    {%  for option in is_read %}
+        <option value="{{ option }}">{{ option }}</option>
+    {% endfor %}
+    </select>
+    <select name="category_filter">
+    <option value="{{ '' }}">{{ '' }}</option>
+    {%  for category in categories %}
+        <option value="{{ category.name }}">{{ category.name }}</option>
+    {% endfor %}
+    </select>
+    <p><input type="submit" name="submit" value="submit"/></p>
+</form>
 {% for object in object_list %}
   <div class="m-2"><a href="{{object.get_absolute_url}}">{{object}}</a></div>
 {% endfor %}
