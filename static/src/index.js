@@ -1,9 +1,11 @@
-import Vue from 'vue';
-import {store} from './store';
-import BootstrapVue from 'bootstrap-vue';
+import 'bootstrap';
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
 
-Vue.use(BootstrapVue);
-new Vue({
-    el: "#app",
-    store
-});
+document.querySelectorAll('.js-text-change').forEach(x => x.addEventListener('click', function (e) {
+    if (e.target.textContent === 'Mniej...')
+        e.target.textContent = 'Więcej...';
+    else
+        e.target.textContent = 'Mniej...';
+}));

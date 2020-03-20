@@ -1,16 +1,113 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    
-<p>
-    <a class="btn btn-light" href="{% url 'fakechecker_QuestionForExpert_list' %}">
-    QuestionForExpert Listing
-    </a>
-</p>
-    
-<table class="table">
-</table>
-<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+    <div class="card p-2 p-md-4 mt-4 js-question-details">
+        <div>
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-outline-dark pl-3 pr-3">Powrót</a>
+        </div>
+        <h1 class="text-center">{{ object.title }}</h1>
+        <p class="text-muted text-center">{{ object.created|date }}</p>
+        <div class="authenticity-bar row text-center">
+            <i class="fas fa-2x fa-thumbs-down col-2 col-md-1 mt-2" ></i>
+            <div class=" col-8 col-md-10 mt-3">
+                <div class="progress {% if object.review_set.count > 0 %}bg-success{% endif %} p-0">
+                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ object.get_fake_percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ object.get_fake_percentage }}%"></div>
+                </div>
+                <p class="h6 mt-3 cursor-pointer"
+                data-toggle="collapse" href="#collapseExperts" role="button" aria-expanded="false" aria-controls="collapseExperts">
+                    Ekspertów zaprzeczających: {{ object.get_fake_number }}, Ekspertów potwierdzających: {{ object.get_real_number }}.
+                </p>
+                <div class="row collapse" id="collapseExperts">
+                    <div class="col-12 col-sm-6">
+                        <h3>Eksperci którzy się niezgadzają:</h3>
+                        <ul class="list-group">
+                            {% for review in object.review_set.all %}
+                                {% if review.is_info_fake %}
+                                    <li class="list-group-item"><a href="#expert-{{ review.expert.id }}">{{ review.expert.user.first_name }} {{ review.expert.user.last_name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <h3>Eksperci którzy się zgadzają:</h3>
+                        <ul class="list-group">
+                            {% for review in object.review_set.all %}
+                                {% if not review.is_info_fake %}
+                                    <li class="list-group-item"><a href="#expert-{{ review.expert.id }}">{{ review.expert.user.first_name }} {{ review.expert.user.last_name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <i class="fas fa-2x fa-thumbs-up col-2 col-md-1"></i>
+        </div>
+        <div class="collapse text-muted mt-4" id="collapseDescription">
+            <p>{{ object.content }}</p>
+            {% if object.list_of_sources %}
+                <h4>Źródła:</h4>
+                <ul>
+                    {% for source in object.list_of_sources %}
+                    <li><a href="{{ source }}">{{ source }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
+        </div>
+        <div class="text-muted text-right pr-4 mt-3 js-text-change cursor-pointer" data-toggle="collapse" href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
+            Więcej...
+        </div>
+        <div class="row p-4">
+            {% for category in object.categories.all %}
+                <a href="" class="badge badge-dark p-2 m-1">
+                    {% if category.fa_icon_class %}
+                        <i class="{{ category.fa_icon_class }}"></i>
+                    {% endif %}
+                    {{ category }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mt-2 p-3">
+        <h2 class="text-center">Opinie ekspertów:</h2>
+        {% for review in object.review_set.all %}
+            <div class="card p-3 review {% if review.is_info_fake %}border-danger{% else %}border-success{% endif %} mb-3" id="expert-{{ review.expert.id }}">
+                <div class="expert-description">
+                    {% if review.expert.profile_pic %}
+                        <img class="img-thumbnail float-left d-sm-block d-none" src="{{ review.expert.profile_pic }}"
+                             alt="{{ review.expert.user.first_name }} {{ review.expert.user.last_name }} profile photo">
+                    {% endif %}
+                    <div class="p-2 float-left">
+                        <h3><a href="{% url 'fakechecker_Expert_detail' review.expert.id %}" class="text-dark">{{ review.expert.user.first_name }} {{ review.expert.user.last_name }}</a></h3>
+                        <p class="text-muted">
+                            {{ review.expert.about }} <br>
+                            {{ review.last_updated }}
+                        </p>
+                    </div>
+                    <div class="float-right p-2">
+                        <i class="fas fa-2x {% if review.is_info_fake %}fa-thumbs-down text-danger{% else %}fa-thumbs-up text-success{% endif %}"></i>
+                    </div>
+                </div>
+                <p class="h6">
+                    {{ review.justification }}
+                </p>
+                {% if review.list_of_sources %}
+                    <h6 class="mt-2">Źródła:</h6>
+                    <ul>
+                        {% for source in review.list_of_sources %}
+                        <li><a href="{{ source }}" target="_blank">{{ source }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if user.expert and review.expert.id == user.expert.id %}
+                    <a href="" class="btn btn-outline-dark">Edytuj swoją wypowiedź</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <h3>Eksperci nie wypowiedzieli się jeszcze co do tego pytania</h3>
+        {% endfor %}
+        {% if user.expert and user.expert not in object.review_set.all.expert %}
+            <a href="" class="btn btn-outline-dark">Dodaj swoją wypowiedź</a>
+        {% endif %}
+    </div>
 {% endblock %}
