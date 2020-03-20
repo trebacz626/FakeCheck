@@ -5,7 +5,6 @@ from . import models
 
 
 class ExpertAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Expert
         fields = "__all__"
@@ -14,15 +13,18 @@ class ExpertAdminForm(forms.ModelForm):
 class ExpertAdmin(admin.ModelAdmin):
     form = ExpertAdminForm
     list_display = [
-        "last_updated",
-        "profile_pic",
-        "about",
-        "created",
+        'last_name',
+        'first_name',
     ]
+
+    def last_name(self, obj):
+        return obj.user.last_name
+
+    def first_name(self, obj):
+        return obj.user.first_name
 
 
 class RedactorAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Redactor
         fields = "__all__"
@@ -31,13 +33,18 @@ class RedactorAdminForm(forms.ModelForm):
 class RedactorAdmin(admin.ModelAdmin):
     form = RedactorAdminForm
     list_display = [
-        "phone_number",
-        "created",
+        'last_name',
+        'first_name',
     ]
+
+    def last_name(self, obj):
+        return obj.user.last_name
+
+    def first_name(self, obj):
+        return obj.user.first_name
 
 
 class QuestionCollectionAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.QuestionCollection
         fields = "__all__"
@@ -52,7 +59,6 @@ class QuestionCollectionAdmin(admin.ModelAdmin):
 
 
 class ReviewAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Review
         fields = "__all__"
@@ -62,15 +68,12 @@ class ReviewAdmin(admin.ModelAdmin):
     form = ReviewAdminForm
     list_display = [
         "last_updated",
-        "justification",
         "is_info_fake",
         "created",
-        "sources",
     ]
 
 
 class CategoryAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.Category
         fields = "__all__"
@@ -82,24 +85,8 @@ class CategoryAdmin(admin.ModelAdmin):
         "name",
     ]
 
-class QuestionAdminForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Question
-        fields = "__all__"
-
-
-class QuestionAdmin(admin.ModelAdmin):
-    form = QuestionAdminForm
-    list_display = [
-        "content",
-        "created",
-        "sources",
-    ]
-
 
 class QuestionFromUserAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.QuestionFromUser
         fields = "__all__"
@@ -108,12 +95,12 @@ class QuestionFromUserAdminForm(forms.ModelForm):
 class QuestionFromUserAdmin(admin.ModelAdmin):
     form = QuestionFromUserAdminForm
     list_display = [
+        "title",
         "is_read",
     ]
 
 
 class QuestionForExpertAdminForm(forms.ModelForm):
-
     class Meta:
         model = models.QuestionForExpert
         fields = "__all__"
@@ -122,6 +109,7 @@ class QuestionForExpertAdminForm(forms.ModelForm):
 class QuestionForExpertAdmin(admin.ModelAdmin):
     form = QuestionForExpertAdminForm
     list_display = [
+        "title",
     ]
 
 
@@ -130,6 +118,5 @@ admin.site.register(models.Redactor, RedactorAdmin)
 admin.site.register(models.QuestionCollection, QuestionCollectionAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.Category, CategoryAdmin)
-admin.site.register(models.Question, QuestionAdmin)
 admin.site.register(models.QuestionFromUser, QuestionFromUserAdmin)
 admin.site.register(models.QuestionForExpert, QuestionForExpertAdmin)

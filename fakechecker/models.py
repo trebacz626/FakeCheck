@@ -6,7 +6,7 @@ class Expert(models.Model):
 
     # Relationships
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
-    categories = models.ManyToManyField("fake-checker.Category")
+    categories = models.ManyToManyField("fakechecker.Category")
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -18,7 +18,7 @@ class Expert(models.Model):
         pass
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.user)
 
     def get_absolute_url(self):
         return reverse("fake-checker_Expert_detail", args=(self.pk,))
@@ -52,7 +52,7 @@ class Redactor(models.Model):
 class QuestionCollection(models.Model):
 
     # Relationships
-    questions_from_user = models.ManyToManyField("fake-checker.QuestionFromUser")
+    questions_from_user = models.ManyToManyField("fakechecker.QuestionFromUser")
 
     # Fields
     name = models.TextField(max_length=100)
@@ -74,8 +74,8 @@ class QuestionCollection(models.Model):
 class Review(models.Model):
 
     # Relationships
-    question_for_expert = models.ForeignKey("fake-checker.QuestionForExpert", on_delete=models.CASCADE)
-    expert = models.ForeignKey("fake-checker.Expert", on_delete=models.CASCADE)
+    question_for_expert = models.ForeignKey("fakechecker.QuestionForExpert", on_delete=models.CASCADE)
+    expert = models.ForeignKey("fakechecker.Expert", on_delete=models.CASCADE)
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -118,7 +118,7 @@ class Category(models.Model):
 class Question(models.Model):
 
     # Relationships
-    categories = models.ManyToManyField("fake-checker.Category", related_name="questions")
+    categories = models.ManyToManyField("fakechecker.Category", related_name="questions")
 
     # Fields
     title = models.TextField(max_length=180)
@@ -160,7 +160,7 @@ class QuestionFromUser(Question):
 class QuestionForExpert(Question):
 
     # Relationships
-    redactor = models.ForeignKey("fake-checker.Redactor", on_delete=models.CASCADE)
+    redactor = models.ForeignKey("fakechecker.Redactor", on_delete=models.CASCADE)
 
     class Meta:
         pass
