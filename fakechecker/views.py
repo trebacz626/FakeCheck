@@ -1,4 +1,5 @@
 from django.views import generic
+from django.shortcuts import render
 from . import models
 from . import forms
 
@@ -117,9 +118,13 @@ class QuestionListView(generic.ListView):
     form_class = forms.QuestionForm
 
 
-class QuestionCreateView(generic.CreateView):
-    model = models.Question
-    form_class = forms.QuestionForm
+def QuestionCreateView(request):
+    form = forms.QuestionForm(request.POST or None)
+
+    if form.is_valid():
+        form.save()
+
+    return render(request, 'fakechecker/question_form.html', {'form': form})
 
 
 class QuestionDetailView(generic.DetailView):
