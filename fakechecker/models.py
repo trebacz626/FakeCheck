@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.db.models import F
 
+
 class Expert(models.Model):
     # Relationships
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
@@ -72,7 +73,7 @@ class QuestionCollection(models.Model):
 class Review(models.Model):
     # Relationships
     question_for_expert = models.ForeignKey("fakechecker.QuestionForExpert", on_delete=models.CASCADE)
-    expert = models.ForeignKey("fakechecker.Expert",related_name="reviews", on_delete=models.CASCADE)
+    expert = models.ForeignKey("fakechecker.Expert", related_name="reviews", on_delete=models.CASCADE)
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
@@ -152,7 +153,6 @@ class Question(models.Model):
         return self.sources.split(self.DELIMITER)
 
 
-
 class QuestionFromUser(Question):
     # Fields
     is_read = models.BooleanField(default=False)
@@ -197,11 +197,11 @@ class QuestionForExpert(Question):
 
     def get_fake_percentage(self):
         if self.review_set.count() != 0:
-            return round(self.get_fake_number()/self.review_set.count()*100)
+            return round(self.get_fake_number() / self.review_set.count() * 100)
         return 0
 
     def get_real_percentage(self):
-        return 100-self.get_fake_percentage()
+        return 100 - self.get_fake_percentage()
 
     def increment_view(self):
         QuestionForExpert.objects.filter(id=self.id).update(views=F('views') + 1)
