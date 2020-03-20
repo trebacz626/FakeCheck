@@ -1,5 +1,7 @@
 from django.views import generic
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
 from . import models
 from . import forms
 
@@ -35,9 +37,11 @@ class RedactorCreateView(generic.CreateView):
     form_class = forms.RedactorForm
 
 
-class RedactorDetailView(generic.DetailView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
+@login_required
+def RedactorDetailView(request, pk):
+    user = models.Redactor.objects.get(id=pk)
+    title = models.QuestionForExpert.objects.filter(redactor=user)
+    return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title})
 
 
 class RedactorUpdateView(generic.UpdateView):
