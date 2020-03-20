@@ -75,7 +75,7 @@ class Review(models.Model):
 
     # Relationships
     question_for_expert = models.ForeignKey("fakechecker.QuestionForExpert", on_delete=models.CASCADE)
-    expert = models.ForeignKey("fakechecker.Expert", on_delete=models.CASCADE)
+    expert = models.ForeignKey("fakechecker.Expert",related_name="reviews", on_delete=models.CASCADE)
 
     # Fields
     last_updated = models.DateTimeField(auto_now=True, editable=False)
