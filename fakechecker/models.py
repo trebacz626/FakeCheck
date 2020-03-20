@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from django.db.models import F
 
 class Expert(models.Model):
     # Relationships
@@ -171,6 +171,9 @@ class QuestionFromUser(Question):
 
 
 class QuestionForExpert(Question):
+    # Fields
+    views = models.BigIntegerField(default=0)
+
     # Relationships
     redactor = models.ForeignKey("fakechecker.Redactor", on_delete=models.CASCADE)
 
@@ -199,3 +202,6 @@ class QuestionForExpert(Question):
 
     def get_real_percentage(self):
         return 100-self.get_fake_percentage()
+
+    def increment_view(self):
+        QuestionForExpert.objects.filter(id=self.id).update(views=F('views') + 1)

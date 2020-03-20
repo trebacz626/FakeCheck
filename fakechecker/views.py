@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.views import generic
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
@@ -152,7 +153,7 @@ class QuestionFromUserListView(generic.ListView):
         elif is_read == 'Tylko przeczytane':
             new_context = new_context.filter(is_read=True)
         if title != '':
-            new_context = new_context.filter(title__contains=title)
+            new_context = new_context.filter(title__icontains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
@@ -207,12 +208,21 @@ class QuestionForExpertListView(generic.ListView):
             new_context = new_context.filter(categories__in=[category])
 
         if title != '':
-            new_context = new_context.filter(title__contains=title)
+            new_context = new_context.filter(title__icontains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
         elif order == 'Od najstarszego':
             new_context = new_context.order_by('-created')
+        elif order == 'Najpopularniejsze':
+            new_context = new_context.order_by('-views')
+        elif order == 'Najmniej popularne':
+            new_context = new_context.order_by('views')
+        elif order == 'Najbardziej oceniane':
+            new_context = new_context.annotate(num_reviews=Count('review')).order_by('-num_reviews')
+        elif order == 'Najmniej oceniane':
+            new_context = new_context.annotate(num_reviews=Count('review')).order_by('num_reviews')
+
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -221,7 +231,7 @@ class QuestionForExpertListView(generic.ListView):
         context['title'] = self.request.GET.get('title', '')
         context['prev_read'] = self.request.GET.get('read', '')
         context['prev_category'] = self.request.GET.get('category', '')
-        context['orders'] = ('Od najnowszego', 'Od najstarszego')
+        context['orders'] = ('Od najnowszego', 'Od najstarszego', 'Najpopularniejsze', 'Najmniej popularne', 'Najbardziej oceniane', 'Najmniej oceniane')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
         return context
