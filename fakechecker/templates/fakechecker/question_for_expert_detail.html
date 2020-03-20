@@ -72,9 +72,9 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
-{#                {% if review.expert.id == user.expert.id %}#}
+                {% if review.expert.id == user.expert.id %}
                     <button class="btn btn-outline-dark">Edytuj swoją wypowiedź</button>
-{#                {% endif %}#}
+                {% endif %}
             </div>
         {% empty %}
             <h3>Eksperci nie wypowiedzieli się jeszcze co do tego pytania</h3>
