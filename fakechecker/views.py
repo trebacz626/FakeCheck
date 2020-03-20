@@ -178,7 +178,7 @@ class QuestionForExpertListView(generic.ListView):
         is_read = self.request.GET.get('read', '')
         order = self.request.GET.get('order', 'created')
 
-        new_context = models.QuestionFromUser.objects.all()
+        new_context = models.QuestionForExpert.objects.all()
         if category != '':
             new_context = new_context.filter(categories__in=[category])
 

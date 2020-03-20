@@ -4,7 +4,6 @@
     <title>{% block tiltle %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'index.css' %}">
-    <script src="{% static 'index.js' %}"></script>
     <script>
         const csrf = '{{ csrf_token }}';
     </script>
@@ -17,5 +16,6 @@
         </div>
     </div>
     {% include 'common/includes/footer.html' %}
+    <script src="{% static 'index.js' %}"></script>
   </body>
 </html>
