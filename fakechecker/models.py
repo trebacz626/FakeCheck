@@ -40,7 +40,7 @@ class Redactor(models.Model):
         pass
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.user.get_full_name())
 
     def get_absolute_url(self):
         return reverse("fakechecker_Redactor_detail", args=(self.pk,))
