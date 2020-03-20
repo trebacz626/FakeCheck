@@ -1,14 +1,13 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    
+
 <p>
     <a class="btn btn-light" href="{% url 'fakechecker_QuestionFromUser_list' %}">
     QuestionFromUser Listing
     </a>
 </p>
-    
+
 <table class="table">
     <tr><td>is_read</td><td>{{ object.is_read }}</td></tr>
 </table>

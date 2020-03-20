@@ -112,27 +112,6 @@ class CategoryUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class QuestionListView(generic.ListView):
-    model = models.Question
-    form_class = forms.QuestionForm
-
-
-class QuestionCreateView(generic.CreateView):
-    model = models.Question
-    form_class = forms.QuestionForm
-
-
-class QuestionDetailView(generic.DetailView):
-    model = models.Question
-    form_class = forms.QuestionForm
-
-
-class QuestionUpdateView(generic.UpdateView):
-    model = models.Question
-    form_class = forms.QuestionForm
-    pk_url_kwarg = "pk"
-
-
 class QuestionFromUserListView(generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
