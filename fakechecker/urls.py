@@ -1,22 +1,9 @@
 from django.urls import path, include
-from rest_framework import routers
 
-from . import api
 from . import views
 
 
-router = routers.DefaultRouter()
-router.register("Expert", api.ExpertViewSet)
-router.register("Redactor", api.RedactorViewSet)
-router.register("QuestionCollection", api.QuestionCollectionViewSet)
-router.register("Review", api.ReviewViewSet)
-router.register("Category", api.CategoryViewSet)
-router.register("Question", api.QuestionViewSet)
-router.register("QuestionFromUser", api.QuestionFromUserViewSet)
-router.register("QuestionForExpert", api.QuestionForExpertViewSet)
-
 urlpatterns = (
-    path("api/v1/", include(router.urls)),
     path("expert/", views.ExpertListView.as_view(), name="fakechecker_Expert_list"),
     path("expert/create/", views.ExpertCreateView.as_view(), name="fakechecker_Expert_create"),
     path("expert/detail/<int:pk>/", views.ExpertDetailView.as_view(), name="fakechecker_Expert_detail"),
