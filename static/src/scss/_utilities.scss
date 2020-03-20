@@ -1,0 +1,19 @@
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.no-decoration{
+  color: inherit;
+  &:hover{
+    color:inherit;
+    text-decoration: inherit;
+  }
+}
+
+.hover-dark{
+  &:hover{
+    color: white;
+    background-color: #8c8c8c80;
+  }
+  transition: 0.15s;
+}

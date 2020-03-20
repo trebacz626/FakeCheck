@@ -1,27 +1,62 @@
 
 {% extends "base.html" %}
 {% block content %}
-    <form method="get" action="{% url 'fakechecker_QuestionFromUser_list' %}">
-    <select name="order">
-    {%  for order in orders %}
-        <option value="{{ order }}"  {% if order == prev_order %}selected{% endif %}>{{ order }}</option>
+    <div class="card row m-2 mt-4">
+        <p class="text-muted pt-2 pl-3 h5">Sortowanie i filtry:</p>
+        <form method="get" action="{% url 'fakechecker_QuestionFromUser_list' %}" class="input-group">
+            <div class="col-12 col-sm-3 mb-2">
+                <input type="text" name="title" class="form-control" placeholder="Tytuł..." value="{{ title }}">
+            </div>
+            <div class="col-12 col-sm-3 mb-3">
+                <select name="order" class="custom-select">
+                    {%  for order in orders %}
+                        <option value="{{ order }}"  {% if order == prev_order %}selected{% endif %}>{{ order }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-sm-2 mb-3">
+                <select name="read" class="custom-select">
+                    {%  for option in is_read %}
+                        <option value="{{ option }}" {% if option == prev_read %}selected{% endif %} >{{ option }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-sm-2 mb-3">
+                <select name="category" class="custom-select">
+                    <option value="" selected>Brak kategorii...</option>
+                    {%  for category in categories %}
+                        <option value="{{ category.name }}" {% if category.name == prev_category %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-sm-2">
+                <button class="btn btn-outline-dark w-100">Szukaj</button>
+            </div>
+        </form>
+    </div>
+    <div class="p-1">
+    {% for object in object_list %}
+        <div class="border hover-dark p-3 m-1 row">
+            <div class="col-12 col-md-8">
+                <a href="{{object.get_absolute_url}}" class="no-decoration">
+                    <p class="h5 text-muted">{{object.title}}</p>
+                </a>
+                {% for category in object.categories.all %}
+                    <a href="" class="badge badge-dark p-1 mr-1">
+                        {% if category.fa_icon_class %}
+                            <i class="{{ category.fa_icon_class }}"></i>
+                        {% endif %}
+                        {{ category }}
+                    </a>
+                {% endfor %}
+                <span class="text-muted">{{ object.created|date }}</span>
+            </div>
+        </div>
+    {% empty %}
+        <div class="border p-3 m-1 row">
+            <h3 class="col-12 text-center">Brak pytań spełniających kryteria...</h3>
+        </div>
     {% endfor %}
-    </select>
-    <select name="read">
-    {%  for option in is_read %}
-        <option value="{{ option }}" {% if option == prev_read %}selected{% endif %} >{{ option }}</option>
-    {% endfor %}
-    </select>
-    <select name="category">
-    <option value="{{ '' }}">{{ '' }}</option>
-    {%  for category in categories %}
-        <option value="{{ category.name }}" {% if category.name == prev_category %}selected{% endif %}>{{ category.name }}</option>
-    {% endfor %}
-    </select>
-    <p><input type="submit" name="submit" value="submit"/></p>
-</form>
-{% for object in object_list %}
-  <div class="m-2"><a href="{{object.get_absolute_url}}">{{object}}</a></div>
-{% endfor %}
-<div><a class="btn btn-primary" href="{% url 'fakechecker_QuestionFromUser_create' %}">Create a new QuestionFromUser</a></div>
+    <div><a class="btn btn-primary" href="{% url 'fakechecker_QuestionFromUser_create' %}">Create a new QuestionFromUser</a></div>
+    </div>
 {% endblock %}

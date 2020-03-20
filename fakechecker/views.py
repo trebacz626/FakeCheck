@@ -132,31 +132,6 @@ class CategoryUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class QuestionListView(generic.ListView):
-    model = models.Question
-    form_class = forms.QuestionForm
-
-
-def QuestionCreateView(request):
-    form = forms.QuestionForm(request.POST or None)
-
-    if form.is_valid():
-        form.save()
-
-    return render(request, 'fakechecker/question_form.html', {'form': form})
-
-
-class QuestionDetailView(generic.DetailView):
-    model = models.Question
-    form_class = forms.QuestionForm
-
-
-class QuestionUpdateView(generic.UpdateView):
-    model = models.Question
-    form_class = forms.QuestionForm
-    pk_url_kwarg = "pk"
-
-
 class QuestionFromUserListView(generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
@@ -165,6 +140,7 @@ class QuestionFromUserListView(generic.ListView):
     def get_queryset(self):
         category = self.request.GET.get('category', '')
         is_read = self.request.GET.get('read', '')
+        title = self.request.GET.get('title', '')
         order = self.request.GET.get('order', 'created')
 
         new_context = models.QuestionFromUser.objects.all()
@@ -175,6 +151,8 @@ class QuestionFromUserListView(generic.ListView):
             new_context = new_context.filter(is_read=False)
         elif is_read == 'Tylko przeczytane':
             new_context = new_context.filter(is_read=True)
+        if title != '':
+            new_context = new_context.filter(title__contains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
@@ -188,6 +166,7 @@ class QuestionFromUserListView(generic.ListView):
         context['prev_order'] = self.request.GET.get('order', 'created')
         context['prev_read'] = self.request.GET.get('read', '')
         context['prev_category'] = self.request.GET.get('category', '')
+        context['title'] = self.request.GET.get('title', '')
         context['orders'] = ('Od najnowszego', 'Od najstarszego')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
@@ -217,6 +196,36 @@ class QuestionForExpertListView(generic.ListView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
     template_name = 'fakechecker/question_for_expert_list.html'
+
+    def get_queryset(self):
+        category = self.request.GET.get('category', '')
+        title = self.request.GET.get('title', '')
+        order = self.request.GET.get('order', 'created')
+
+        new_context = models.QuestionForExpert.objects.all()
+        if category != '':
+            new_context = new_context.filter(categories__in=[category])
+
+        if title != '':
+            new_context = new_context.filter(title__contains=title)
+
+        if order == 'Od najnowszego':
+            new_context = new_context.order_by('created')
+        elif order == 'Od najstarszego':
+            new_context = new_context.order_by('-created')
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionForExpertListView, self).get_context_data(**kwargs)
+        context['prev_order'] = self.request.GET.get('order', 'created')
+        context['title'] = self.request.GET.get('title', '')
+        context['prev_read'] = self.request.GET.get('read', '')
+        context['prev_category'] = self.request.GET.get('category', '')
+        context['orders'] = ('Od najnowszego', 'Od najstarszego')
+        context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
+        context['categories'] = models.Category.objects.all()
+        return context
+
 
 
 class QuestionForExpertCreateView(generic.CreateView):
