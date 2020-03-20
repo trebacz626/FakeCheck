@@ -33,6 +33,7 @@ class RedactorAdminForm(forms.ModelForm):
 class RedactorAdmin(admin.ModelAdmin):
     form = RedactorAdminForm
     list_display = [
+        'user',
         'last_name',
         'first_name',
     ]
