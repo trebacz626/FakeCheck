@@ -74,6 +74,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FakeCheck.wsgi.application'
 
+MIN_REVIEWS_FOR_PUBLIC_QUESTION = 3
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
