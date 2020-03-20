@@ -43,6 +43,9 @@
                     </a>
                 {% endfor %}
                 <span class="text-muted">{{ object.created|date }}</span>
+            {% if user.expert %}
+                <a class="text-muted" href="{{ object.redactor.get_absolute_url }}">{{ object.redactor.user.first_name }} {{ object.redactor.user.last_name }}</a>
+            {% endif %}
             </div>
             <div class="col-12 col-md-4 mt-md-0 mt-3">
                 <div class="row text-center">
