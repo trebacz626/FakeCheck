@@ -120,6 +120,7 @@ class QuestionFromUserListView(generic.ListView):
     def get_queryset(self):
         category = self.request.GET.get('category', '')
         is_read = self.request.GET.get('read', '')
+        title = self.request.GET.get('title', '')
         order = self.request.GET.get('order', 'created')
 
         new_context = models.QuestionFromUser.objects.all()
@@ -130,6 +131,8 @@ class QuestionFromUserListView(generic.ListView):
             new_context = new_context.filter(is_read=False)
         elif is_read == 'Tylko przeczytane':
             new_context = new_context.filter(is_read=True)
+        if title != '':
+            new_context = new_context.filter(title__contains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
@@ -143,6 +146,7 @@ class QuestionFromUserListView(generic.ListView):
         context['prev_order'] = self.request.GET.get('order', 'created')
         context['prev_read'] = self.request.GET.get('read', '')
         context['prev_category'] = self.request.GET.get('category', '')
+        context['title'] = self.request.GET.get('title', '')
         context['orders'] = ('Od najnowszego', 'Od najstarszego')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
