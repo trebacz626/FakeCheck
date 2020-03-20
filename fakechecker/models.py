@@ -3,7 +3,6 @@ from django.urls import reverse
 
 
 class Expert(models.Model):
-
     # Relationships
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
     categories = models.ManyToManyField("fakechecker.Category")
@@ -18,7 +17,7 @@ class Expert(models.Model):
         pass
 
     def __str__(self):
-        return str(self.user)
+        return self.user.get_full_name()
 
     def get_absolute_url(self):
         return reverse("fakechecker_Expert_detail", args=(self.pk,))
@@ -28,7 +27,6 @@ class Expert(models.Model):
 
 
 class Redactor(models.Model):
-
     # Relationships
     user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
 
@@ -40,7 +38,7 @@ class Redactor(models.Model):
         pass
 
     def __str__(self):
-        return str(self.user.get_full_name())
+        return self.user.get_full_name()
 
     def get_absolute_url(self):
         return reverse("fakechecker_Redactor_detail", args=(self.pk,))
@@ -50,9 +48,9 @@ class Redactor(models.Model):
 
 
 class QuestionCollection(models.Model):
-
     # Relationships
     questions_from_user = models.ManyToManyField("fakechecker.QuestionFromUser")
+    redactor = models.ForeignKey("fakechecker.Redactor", on_delete=models.CASCADE)
 
     # Fields
     name = models.TextField(max_length=100)
@@ -72,7 +70,6 @@ class QuestionCollection(models.Model):
 
 
 class Review(models.Model):
-
     # Relationships
     question_for_expert = models.ForeignKey("fakechecker.QuestionForExpert", on_delete=models.CASCADE)
     expert = models.ForeignKey("fakechecker.Expert", on_delete=models.CASCADE)
@@ -98,7 +95,6 @@ class Review(models.Model):
 
 
 class Category(models.Model):
-
     # Fields
     name = models.TextField(max_length=100, primary_key=True)
 
@@ -116,7 +112,6 @@ class Category(models.Model):
 
 
 class Question(models.Model):
-
     # Relationships
     categories = models.ManyToManyField("fakechecker.Category", related_name="questions", blank=False)
 
@@ -132,6 +127,9 @@ class Question(models.Model):
     def __str__(self):
         return str(self.title)
 
+    def categories_list(self):
+        return ", ".join([category.name for category in self.categories.all()])
+
     def get_absolute_url(self):
         return reverse("fakechecker_Question_detail", args=(self.pk,))
 
@@ -140,7 +138,6 @@ class Question(models.Model):
 
 
 class QuestionFromUser(Question):
-
     # Fields
     is_read = models.BooleanField(default=False)
 
@@ -158,7 +155,6 @@ class QuestionFromUser(Question):
 
 
 class QuestionForExpert(Question):
-
     # Relationships
     redactor = models.ForeignKey("fakechecker.Redactor", on_delete=models.CASCADE)
 
