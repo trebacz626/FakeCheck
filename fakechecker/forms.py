@@ -48,6 +48,7 @@ class CategoryForm(forms.ModelForm):
         model = models.Category
         fields = [
             "name",
+            "fa_icon_class"
         ]
 
 

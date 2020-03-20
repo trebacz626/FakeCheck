@@ -84,8 +84,13 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     sources = models.TextField()
 
+    DELIMITER = ","
+
     class Meta:
         pass
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def __str__(self):
         return str(self.pk)
@@ -96,11 +101,15 @@ class Review(models.Model):
     def get_update_url(self):
         return reverse("fakechecker_Review_update", args=(self.pk,))
 
+    def list_of_sources(self):
+        return self.sources.split(self.DELIMITER)
+
 
 class Category(models.Model):
 
     # Fields
     name = models.TextField(max_length=100, primary_key=True)
+    fa_icon_class = models.TextField(max_length=64, null=True)
 
     class Meta:
         pass
@@ -126,6 +135,9 @@ class Question(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     sources = models.TextField()
 
+    # Constant
+    DELIMITER = ","
+
     class Meta:
         pass
 
@@ -137,6 +149,10 @@ class Question(models.Model):
 
     def get_update_url(self):
         return reverse("fakechecker_Question_update", args=(self.pk,))
+
+    def list_of_sources(self):
+        return self.sources.split(self.DELIMITER)
+
 
 
 class QuestionFromUser(Question):
@@ -173,3 +189,14 @@ class QuestionForExpert(Question):
 
     def get_update_url(self):
         return reverse("fakechecker_QuestionForExpert_update", args=(self.pk,))
+
+    def get_fake_number(self):
+        return self.review_set.filter(is_info_fake=True).count()
+
+    def get_real_number(self):
+        return self.review_set.filter(is_info_fake=False).count()
+
+    def get_fake_percentage(self):
+        if self.review_set.count() != 0:
+            return self.get_fake_number()/self.review_set.count()*100
+        return 0
