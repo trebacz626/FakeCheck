@@ -118,13 +118,13 @@ class Category(models.Model):
 class Question(models.Model):
 
     # Relationships
-    categories = models.ManyToManyField("fakechecker.Category", related_name="questions")
+    categories = models.ManyToManyField("fakechecker.Category", related_name="questions", blank=False)
 
     # Fields
-    title = models.TextField(max_length=180)
+    title = models.CharField(max_length=180)
     content = models.TextField(max_length=1000)
     created = models.DateTimeField(auto_now_add=True, editable=False)
-    sources = models.TextField()
+    sources = models.TextField(blank=True)
 
     class Meta:
         pass
@@ -142,7 +142,7 @@ class Question(models.Model):
 class QuestionFromUser(Question):
 
     # Fields
-    is_read = models.BooleanField()
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         pass
