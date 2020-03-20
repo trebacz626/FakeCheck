@@ -198,5 +198,8 @@ class QuestionForExpert(Question):
 
     def get_fake_percentage(self):
         if self.review_set.count() != 0:
-            return self.get_fake_number()/self.review_set.count()*100
+            return round(self.get_fake_number()/self.review_set.count()*100)
         return 0
+
+    def get_real_percentage(self):
+        return 100-self.get_fake_percentage()

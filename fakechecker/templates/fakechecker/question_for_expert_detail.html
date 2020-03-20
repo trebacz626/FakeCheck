@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load expert_extras %}
 {% block content %}
     <div class="card p-2 p-md-4 mt-4 js-question-details">
         <div>
@@ -21,10 +20,10 @@
                 <div class="row collapse" id="collapseExperts">
                     <div class="col-12 col-sm-6">
                         <h3>Eksperci którzy się niezgadzają:</h3>
-                        <ul>
+                        <ul class="list-group">
                             {% for review in object.review_set.all %}
                                 {% if review.is_info_fake %}
-                                    <li><a href="#expert-{{ review.expert.id }}">{{ review.expert.user.first_name }} {{ review.expert.user.last_name }}</a></li>
+                                    <li class="list-group-item"><a href="#expert-{{ review.expert.id }}">{{ review.expert.user.first_name }} {{ review.expert.user.last_name }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>

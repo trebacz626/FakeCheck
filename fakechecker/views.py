@@ -175,28 +175,26 @@ class QuestionForExpertListView(generic.ListView):
 
     def get_queryset(self):
         category = self.request.GET.get('category', '')
-        is_read = self.request.GET.get('read', '')
+        title = self.request.GET.get('title', '')
         order = self.request.GET.get('order', 'created')
 
         new_context = models.QuestionForExpert.objects.all()
         if category != '':
             new_context = new_context.filter(categories__in=[category])
 
-        if is_read == 'Tylko nowe':
-            new_context = new_context.filter(is_read=False)
-        elif is_read == 'Tylko przeczytane':
-            new_context = new_context.filter(is_read=True)
+        if title != '':
+            new_context = new_context.filter(title__contains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
         elif order == 'Od najstarszego':
             new_context = new_context.order_by('-created')
-
         return new_context
 
     def get_context_data(self, **kwargs):
         context = super(QuestionForExpertListView, self).get_context_data(**kwargs)
         context['prev_order'] = self.request.GET.get('order', 'created')
+        context['title'] = self.request.GET.get('title', '')
         context['prev_read'] = self.request.GET.get('read', '')
         context['prev_category'] = self.request.GET.get('category', '')
         context['orders'] = ('Od najnowszego', 'Od najstarszego')

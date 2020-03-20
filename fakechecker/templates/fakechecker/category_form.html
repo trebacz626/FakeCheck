@@ -12,16 +12,14 @@
 <form method="post">
 {% csrf_token %}
   <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="name">name: </label>
+      <label class="col-sm-2 col-form-label" for="name">Nazwa kategorii: </label>
       <input class="form-control col-sm-10" id="name" type="text" name="name" value="{{ object.name }}">
   </div>
   <div class="form-group row">
-      <label class="col-sm-2 col-form-label" for="fa_icon_class">Icon class: </label>
-        <i class=""></i>
+      <label class="col-sm-2 col-form-label" for="fa_icon_class">Klasa ikony <i class="{{ object.fa_icon_class }}"></i>: </label>
       <input class="form-control col-sm-10" id="fa_icon_class" type="text" name="fa_icon_class" value="{% if category.fa_icon_class %}{{ object.fa_icon_class }}{% endif %}">
   </div>
   <input type="submit" value="Save" class="btn btn-primary">
 </form>
-
 {% endblock %}
 
