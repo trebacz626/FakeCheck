@@ -48,25 +48,25 @@ class RedactorUpdateView(generic.UpdateView):
 class QuestionCollectionListView(generic.ListView):
     model = models.QuestionCollection
     form_class = forms.QuestionCollectionForm
-    template_name = 'fake-checker/question_collection_list.html'
+    template_name = 'fakechecker/question_collection_list.html'
 
 
 class QuestionCollectionCreateView(generic.CreateView):
     model = models.QuestionCollection
     form_class = forms.QuestionCollectionForm
-    template_name = 'fake-checker/question_collection_form.html'
+    template_name = 'fakechecker/question_collection_form.html'
 
 
 class QuestionCollectionDetailView(generic.DetailView):
     model = models.QuestionCollection
     form_class = forms.QuestionCollectionForm
-    template_name = 'fake-checker/question_collection_detail.html'
+    template_name = 'fakechecker/question_collection_detail.html'
 
 
 class QuestionCollectionUpdateView(generic.UpdateView):
     model = models.QuestionCollection
     form_class = forms.QuestionCollectionForm
-    template_name = 'fake-checker/question_collection_form.html'
+    template_name = 'fakechecker/question_collection_form.html'
     pk_url_kwarg = "pk"
 
 
@@ -136,7 +136,7 @@ class QuestionUpdateView(generic.UpdateView):
 class QuestionFromUserListView(generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
-    template_name = 'fake-checker/question_from_user_list.html'
+    template_name = 'fakechecker/question_from_user_list.html'
 
     def get_queryset(self):
         category = self.request.GET.get('category', '')
@@ -173,42 +173,42 @@ class QuestionFromUserListView(generic.ListView):
 class QuestionFromUserCreateView(generic.CreateView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
-    template_name = 'fake-checker/question_from_user_form.html'
+    template_name = 'fakechecker/question_from_user_form.html'
 
 
 class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
-    template_name = 'fake-checker/question_from_user_detail.html'
+    template_name = 'fakechecker/question_from_user_detail.html'
 
 
 class QuestionFromUserUpdateView(generic.UpdateView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
-    template_name = 'fake-checker/question_from_user_form.html'
+    template_name = 'fakechecker/question_from_user_form.html'
     pk_url_kwarg = "pk"
 
 
 class QuestionForExpertListView(generic.ListView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
-    template_name = 'fake-checker/question_for_expert_list.html'
+    template_name = 'fakechecker/question_for_expert_list.html'
 
 
 class QuestionForExpertCreateView(generic.CreateView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
-    template_name = 'fake-checker/question_for_expert_form.html'
+    template_name = 'fakechecker/question_for_expert_form.html'
 
 
 class QuestionForExpertDetailView(generic.DetailView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
-    template_name = 'fake-checker/question_for_expert_detail.html'
+    template_name = 'fakechecker/question_for_expert_detail.html'
 
 
 class QuestionForExpertUpdateView(generic.UpdateView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
     pk_url_kwarg = "pk"
-    template_name = 'fake-checker/question_for_expert_form.html'
+    template_name = 'fakechecker/question_for_expert_form.html'
