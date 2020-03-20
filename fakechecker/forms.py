@@ -37,10 +37,17 @@ class ReviewForm(forms.ModelForm):
         fields = [
             "justification",
             "is_info_fake",
-            "sources",
-            "question_for_expert",
-            "expert",
+            "sources"
         ]
+        exclude = ['created','last_updated']
+    def clean_sources(self):
+        sources = self.cleaned_data.get('sources')
+        if (sources.count(' /') > 0 or sources.count('/ ') > 0 or sources.count('i ') > 0 or sources.count(
+                ' i') > 0) or (
+                len(sources) > 0 and (sources.count('.') == 0 or (sources.count(' ') > 0 and sources.count(',') == 0))):
+            raise forms.ValidationError('Zła forma wysłania linków.')
+        else:
+            return sources
 
 
 class CategoryForm(forms.ModelForm):
@@ -54,13 +61,17 @@ class CategoryForm(forms.ModelForm):
 
 class QuestionForm(forms.ModelForm):
     class Meta:
-        model = models.Question
-        fields = [
-            "title",
-            "content",
-            "sources",
-            "categories",
-        ]
+        model = models.QuestionFromUser
+        fields = ["title", "content", "categories", "sources"]
+
+    def clean_sources(self):
+        sources = self.cleaned_data.get('sources')
+        if (sources.count(' /') > 0 or sources.count('/ ') > 0 or sources.count('i ') > 0 or sources.count(
+                ' i') > 0) or (
+                len(sources) > 0 and (sources.count('.') == 0 or (sources.count(' ') > 0 and sources.count(',') == 0))):
+            raise forms.ValidationError('Zła forma wysłania linków.')
+        else:
+            return sources
 
 
 class QuestionFromUserForm(forms.ModelForm):

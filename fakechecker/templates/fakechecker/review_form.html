@@ -1,36 +1,35 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    
+{% load crispy_forms_tags %}
 <p>
     <a class="btn btn-light" href="{% url 'fakechecker_Review_list' %}">
     Review Listing
     </a>
 </p>
-    
+
+<h3><strong>Pytanie:</strong></h3>
+<div class="row">
+  <label class="col-sm-12"><strong>Tytuł:</strong></label>
+  <p class="col-sm-12">{{question_for_expert.title}}</p>
+  <label class="col-sm-12"><strong>Treść:</strong></label>
+  <p class="col-sm-12">{{question_for_expert.content}}</p>
+  <label class="col-sm-12"><strong>Utworzone:</strong></label>
+  <p class="col-sm-12">{{question_for_expert.created}}</p>
+  <label class="col-sm-12"><strong>Żródła:</strong></label>
+  <p class="col-sm-12">{{question_for_expert.sources}}</p>
+</div>
+<h3><strong>Twoja recenzja:</strong></h3>
 <form method="post">
-{% csrf_token %}
-  <div class="form-group row">
-  <label class="col-sm-2 col-form-label" for="last_updated">last_updated: </label>
-  <input class="form-control col-sm-10" id="last_updated" type="date" name="last_updated" value="{{ object.last_updated }}" disabled>
-  </div>
-  <div class="form-group row">
-  <label class="col-sm-2 col-form-label" for="justification">justification: </label>
-  <input class="form-control col-sm-10" id="justification" type="text" name="justification" value="{{ object.justification }}">
-  </div>
-  <div class="form-group row">
-  <label class="col-sm-2 col-form-label" for="is_info_fake">is_info_fake: </label>
-  <input class="form-control col-sm-10" id="is_info_fake" type="text" name="is_info_fake" value="{{ object.is_info_fake }}">
-  </div>
-  <div class="form-group row">
-  <label class="col-sm-2 col-form-label" for="created">created: </label>
-  <input class="form-control col-sm-10" id="created" type="date" name="created" value="{{ object.created }}" disabled>
-  </div>
-  <div class="form-group row">
-  <label class="col-sm-2 col-form-label" for="sources">sources: </label>
-  <input class="form-control col-sm-10" id="sources" type="text" name="sources" value="{{ object.sources }}">
-  </div>
+{%  csrf_token %}
+  {{ form|crispy}}
+  <br>
+  *Pola wymagane.
+  <br>
+  W źródłach powinny się znajdować tylko linki.
+  <br>
+  Linki oddzielaj ",", na przykład "https://fake-check.akai.org.pl/, https://www.hackcrisis.com/".
+  <br>
   <input type="submit" value="Save" class="btn btn-primary">
 </form>
 

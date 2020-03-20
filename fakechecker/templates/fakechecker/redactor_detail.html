@@ -9,10 +9,17 @@
     </a>
 </p>
     
-<table class="table">
-    <tr><td>phone_number</td><td>{{ object.phone_number }}</td></tr>
-    <tr><td>created</td><td>{{ object.created }}</td></tr>
-</table>
-<a class="btn btn-primary" href="{{object.get_update_url}}">Edit</a>
+
+    <div style="text-align: center; margin-left: auto; margin-right: auto;">
+    <b>Użytkownik:</b> {{ user }} <br>
+    <b>Email:</b> {{ user.user.email }} <br>
+    <b>Numer telefonu:</b> {{ user.phone_number }} <br><br>
+    <b>Zredagowane pytania:</b><br>
+        {% for title in title %}
+            {{ title }}<br>
+        {% endfor %}
+    <br>
+    <b>Użytkownik stworzony:</b> {{ user.created }}<br>
+    </div>
 
 {% endblock %}

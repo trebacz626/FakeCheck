@@ -1,6 +1,10 @@
 from django.views import generic
+from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
+from django.shortcuts import get_object_or_404
+from .security import IsExpertMixin,HasExpertAddedReviewMixin
 
 
 class ExpertListView(generic.ListView):
@@ -34,9 +38,11 @@ class RedactorCreateView(generic.CreateView):
     form_class = forms.RedactorForm
 
 
-class RedactorDetailView(generic.DetailView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
+@login_required
+def RedactorDetailView(request, pk):
+    user = models.Redactor.objects.get(id=pk)
+    title = models.QuestionForExpert.objects.filter(redactor=user)
+    return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title})
 
 
 class RedactorUpdateView(generic.UpdateView):
@@ -75,9 +81,23 @@ class ReviewListView(generic.ListView):
     form_class = forms.ReviewForm
 
 
-class ReviewCreateView(generic.CreateView):
+class ReviewCreateView(IsExpertMixin,HasExpertAddedReviewMixin,generic.CreateView):
     model = models.Review
     form_class = forms.ReviewForm
+    def get_context_data(self, **kwargs):
+        context = super(ReviewCreateView, self).get_context_data(**kwargs)
+        context['question_for_expert'] = self.question_for_expert
+        return context
+    def form_valid(self, form, *args, **kwargs):
+        question_for_expert = get_object_or_404(models.QuestionForExpert, id=self.kwargs['question_for_expert_id'])
+        self.object = form.save(commit=False)
+        self.object.question_for_expert = question_for_expert
+        self.object.expert = self.expert
+        self.object.save()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class ReviewDetailView(generic.DetailView):
