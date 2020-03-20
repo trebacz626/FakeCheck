@@ -1,13 +1,5 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
-
-
-def get_full_name(self):
-    return self.get_full_name()
-
-
-User.add_to_class("__str__", get_full_name)
 
 
 class Expert(models.Model):
@@ -48,7 +40,7 @@ class Redactor(models.Model):
         pass
 
     def __str__(self):
-        return str(self.user)
+        return str(self.user.get_full_name())
 
     def get_absolute_url(self):
         return reverse("fakechecker_Redactor_detail", args=(self.pk,))
