@@ -1,4 +1,4 @@
-# Finance manager
+# FakeCheck
 
 ## How to install
 1. Download repo, 
@@ -9,7 +9,8 @@
 6. Compile frontend assets: `npm run dev`,
 7. (optional) Change database settings in settings.py if you want to use different (non-sqlite) db backend, 
 8. Migrate database: `python manage.py migrate`,
-9. To run dev server: `python manage.py runserver`
+9. Load seed database `python manage.py loaddata db.json`
+10. To run dev server: `python manage.py runserver`
 
 ## Tips for devs
 
