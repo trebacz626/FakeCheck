@@ -2,15 +2,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-    
-<p>
-    <a class="btn btn-light" href="{% url 'Category_list' %}">
-    Category Listing
-    </a>
-</p>
-    
-<form method="post">
+<form method="post" class="mt-4">
 {% csrf_token %}
+<a class="btn btn-outline-dark  w-100 float-right mb-3" href="{% url 'Category_list' %}">Lista kategorii</a>
   <div class="form-group row">
       <label class="col-sm-2 col-form-label" for="name">Nazwa kategorii: </label>
       <input class="form-control col-sm-10" id="name" type="text" name="name" value="{{ object.name }}">
@@ -19,7 +13,8 @@
       <label class="col-sm-2 col-form-label" for="fa_icon_class">Klasa ikony <i class="{{ object.fa_icon_class }}"></i>: </label>
       <input class="form-control col-sm-10" id="fa_icon_class" type="text" name="fa_icon_class" value="{% if category.fa_icon_class %}{{ object.fa_icon_class }}{% endif %}">
   </div>
-  <input type="submit" value="Save" class="btn btn-outline-dark">
+    <input type="submit" value="Save" class="btn btn-outline-success w-100 float-left" />
+
 </form>
 {% endblock %}
 

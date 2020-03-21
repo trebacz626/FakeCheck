@@ -27,7 +27,6 @@ urlpatterns = (
 
     # Reviews
     path("review/create/<int:question_for_expert_id>/", views.ReviewCreateView.as_view(), name="Review_create"),
-    path("review/detail/<int:pk>/", views.ReviewDetailView.as_view(), name="Review_detail"),
     path("review/update/<int:pk>/", views.ReviewUpdateView.as_view(), name="Review_update"),
 
     # Categories
