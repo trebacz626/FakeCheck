@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import Textarea
 from . import models
 
 
@@ -105,5 +104,5 @@ class QuestionForExpertForm(forms.ModelForm):
             'categories': "Kategorie",
         }
         widgets = {
-            'sources': Textarea(attrs={'rows': 4, 'style': 'resize:none;'})
+            'sources': forms.Textarea(attrs={'rows': 4, 'style': 'resize:none;'})
         }
