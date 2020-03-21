@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.views import generic, View
-from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,54 +11,24 @@ from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberO
 from django.contrib.auth import views as auth_views
 
 
-class ExpertListView(generic.ListView):
+class ExpertListView(LoginRequiredMixin, generic.ListView):
     model = models.Expert
     form_class = forms.ExpertForm
 
 
-class ExpertCreateView(generic.CreateView):
+class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
     form_class = forms.ExpertForm
 
 
-class ExpertDetailView(generic.DetailView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-
-
-class ExpertUpdateView(generic.UpdateView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-    pk_url_kwarg = "pk"
-
-
-class RedactorListView(generic.ListView):
+class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
     form_class = forms.RedactorForm
 
 
-class RedactorCreateView(generic.CreateView):
+class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
-
-
-@login_required
-def RedactorDetailView(request, pk):
-    user = models.Redactor.objects.get(id=pk)
-    title = models.QuestionForExpert.objects.filter(redactor=user)
-    question_collections = models.QuestionCollection.objects.filter(redactor=user)
-    return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title, 'question_collections':question_collections})
-
-
-class RedactorUpdateView(generic.UpdateView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
-    pk_url_kwarg = "pk"
-
-
-class ReviewListView(generic.ListView):
-    model = models.Review
-    form_class = forms.ReviewForm
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
@@ -89,12 +58,12 @@ class ReviewUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class CategoryListView(generic.ListView):
+class CategoryListView(IsRedactorMixin, generic.ListView):
     model = models.Category
     form_class = forms.CategoryForm
 
 
-class CategoryCreateView(generic.CreateView):
+class CategoryCreateView(IsRedactorMixin, generic.CreateView):
     model = models.Category
     form_class = forms.CategoryForm
 
@@ -104,13 +73,13 @@ class CategoryDetailView(generic.DetailView):
     form_class = forms.CategoryForm
 
 
-class CategoryUpdateView(generic.UpdateView):
+class CategoryUpdateView(IsRedactorMixin, generic.UpdateView):
     model = models.Category
     form_class = forms.CategoryForm
     pk_url_kwarg = "pk"
 
 
-class QuestionFromUserListView(IsRedactorMixin,generic.ListView):
+class QuestionFromUserListView(IsRedactorMixin, generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_list.html'
@@ -152,23 +121,20 @@ class QuestionFromUserListView(IsRedactorMixin,generic.ListView):
         return context
 
 
-class QuestionFromUserCreateView(generic.CreateView):
-    model = models.QuestionFromUser
-    form_class = forms.QuestionFromUserForm
-    template_name = 'fakechecker/question_from_user_form.html'
+def QuestionFromUserCreateView(request):
+    form = forms.QuestionFromUserForm(request.POST or None)
+
+    if form.is_valid():
+        form.save()
+
+    return render(request, 'fakechecker/question_from_user_form.html', {'form': form})
+
 
 
 class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_detail.html'
-
-
-class QuestionFromUserUpdateView(generic.UpdateView):
-    model = models.QuestionFromUser
-    form_class = forms.QuestionFromUserForm
-    template_name = 'fakechecker/question_from_user_form.html'
-    pk_url_kwarg = "pk"
 
 
 class QuestionForExpertListView(generic.ListView):

@@ -1,4 +1,7 @@
 from django.urls import path, include
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from . import security
 from . import views
 from . import questionCollectionViews
 
@@ -10,16 +13,12 @@ urlpatterns = (
 
     # Experts
     path("expert/", views.ExpertListView.as_view(), name="Expert_list"),
-    path("expert/create/", views.ExpertCreateView.as_view(), name="Expert_create"),
     path("expert/detail/<int:pk>/", views.ExpertDetailView.as_view(), name="Expert_detail"),
-    path("expert/update/<int:pk>/", views.ExpertUpdateView.as_view(), name="Expert_update"),
 
 
     # Redactors
     path("redactor/", views.RedactorListView.as_view(), name="Redactor_list"),
-    path("redactor/create/", views.RedactorCreateView.as_view(), name="Redactor_create"),
-    path("redactor/detail/<int:pk>/", views.RedactorDetailView, name="Redactor_detail"),
-    path("redactor/update/<int:pk>/", views.RedactorUpdateView.as_view(), name="Redactor_update"),
+    path("redactor/detail/<int:pk>/", views.RedactorDetailView.as_view(), name="Redactor_detail"),
 
     # Collections
     path("collection/", questionCollectionViews.QuestionCollectionListView.as_view(), name="QuestionCollection_list"),
@@ -40,9 +39,8 @@ urlpatterns = (
 
     # Questions from users
     path("question/asked/", views.QuestionFromUserListView.as_view(), name="QuestionFromUser_list"),
-    path("question/asked/create/", views.QuestionFromUserCreateView.as_view(), name="QuestionFromUser_create"),
+    path("question/asked/create/", views.QuestionFromUserCreateView, name="QuestionFromUser_create"),
     path("question/asked/detail/<int:pk>/", views.QuestionFromUserDetailView.as_view(), name="QuestionFromUser_detail"),
-    path("question/asked/update/<int:pk>/", views.QuestionFromUserUpdateView.as_view(), name="QuestionFromUser_update"),
 
     # Questions for Experts
     path("question/", views.QuestionForExpertListView.as_view(), name="QuestionForExpert_list"),

@@ -8,23 +8,13 @@
     Redactor Listing
     </a>
 </p>
-    
 
-    <div style="text-align: center; margin-left: auto; margin-right: auto;">
-    <b>Użytkownik:</b> {{ user }} <br>
-    <b>Email:</b> {{ user.user.email }} <br>
-    <b>Numer telefonu:</b> {{ user.phone_number }} <br><br>
-    <b>Zredagowane pytania:</b><br>
-        {% for title in title %}
-            {{ title }}<br>
-        {% endfor %}
-    <br>
-    <b>Użytkownik stworzony:</b> {{ user.created }}<br>
-    <b>Kolekcje Pytań:</b><br>
-        {% for question_collection in question_collections%}
-            <a href = "{{question_collection.get_absolute_url}}">{{question_collection.name}}</a><br>
-
-        {%endfor%}
+    <div style="text-align: center; width: 100vw;
+    vertical-align: middle; height: 50vh; display:table-cell;">
+    <b>Użytkownik:</b> {{ object.user.get_full_name }} <br>
+    <b>Email:</b> {{ object.user.email }} <br>
+    <b>Numer telefonu:</b> {{ object.phone_number }} <br><br>
+    <b>Użytkownik stworzony:</b> {{ object.created }}<br>
     </div>
 
 {% endblock %}
