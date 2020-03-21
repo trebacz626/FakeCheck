@@ -97,6 +97,9 @@ class Review(models.Model):
     def __str__(self):
         return str(self.pk)
 
+    def get_absolute_url(self):
+        return reverse("QuestionForExpert_detail", args=(self.question_for_expert.id,))
+
     def get_update_url(self):
         return reverse("Review_update", args=(self.pk,))
 
