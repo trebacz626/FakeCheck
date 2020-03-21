@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.urls import reverse
 from django.views import generic, View
@@ -14,14 +13,12 @@ from django.contrib.auth import views as auth_views
 
 class ExpertListView(LoginRequiredMixin, generic.ListView):
     model = models.Expert
-    form_class = forms.ExpertForm
     login_url = '/login'
     redirect_field_name = 'redirect_to'
 
 
 class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
-    form_class = forms.ExpertForm
     login_url = '/login'
     redirect_field_name = 'redirect_to'
 
@@ -61,14 +58,12 @@ class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
 
 class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
-    form_class = forms.RedactorForm
     login_url = '/login'
     redirect_field_name = 'redirect_to'
 
 
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
-    form_class = forms.RedactorForm
     login_url = '/login'
     redirect_field_name = 'redirect_to'
 
@@ -342,6 +337,7 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
 
 class LoginView(auth_views.LoginView):
     template_name = "fakechecker/login.html"
+    form_class = forms.CustomAuthenticationForm
 
 
 class LogoutView(auth_views.LogoutView):
@@ -351,7 +347,7 @@ class LogoutView(auth_views.LogoutView):
         next_page = super(LogoutView, self).get_next_page()
         messages.add_message(
             self.request, messages.SUCCESS,
-            'You successfully log out!'
+            'Zostałeś wylogowany pomyślnie!'
         )
         return next_page
 
