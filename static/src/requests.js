@@ -6,7 +6,7 @@ $.ajaxSetup({
     }
 });
 
-const collectionManagementURL = (collection_id,question_id) => `${window.location.protocol}://${window.location.}/collection/${collection_id}/question/${question_id}/`;
+const collectionManagementURL = (collection_id,question_id) => `${window.location.protocol}://${window.location.host}/collection/${collection_id}/question/${question_id}/`;
 const createCollectionURL = `${window.location.protocol}://${window.location.host}/collection/create/`;
 
 export async function addToCollection(collection_id,question_id){
