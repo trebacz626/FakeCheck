@@ -21,7 +21,7 @@ urlpatterns = (
     path("redactor/detail/<int:pk>/", views.RedactorDetailView.as_view(), name="Redactor_detail"),
 
     # Collections
-    path("collection/", views.QuestionCollectionListView.as_view(), name="QuestionCollection_list"),
+    path("collection/", questionCollectionViews.QuestionCollectionListView.as_view(), name="QuestionCollection_list"),
     path("collection/create/", questionCollectionViews.QuestionCollectionCreateView.as_view(), name="QuestionCollection_create"),
     path("collection/detail/<int:pk>/", questionCollectionViews.QuestionCollectionDetailView.as_view(), name="QuestionCollection_detail"),
     path("collection/<int:pk>/question/<int:question_id>/", questionCollectionViews.QuestionCollectionViewQuestion.as_view(), name="fakechecker_QuestionCollection_question"),

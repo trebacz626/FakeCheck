@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.views import generic, View
-from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
 from django.shortcuts import render, redirect, get_object_or_404
@@ -30,31 +29,6 @@ class RedactorListView(LoginRequiredMixin, generic.ListView):
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
-
-
-class QuestionCollectionListView(generic.ListView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_list.html'
-
-
-class QuestionCollectionCreateView(generic.CreateView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_form.html'
-
-
-class QuestionCollectionDetailView(generic.DetailView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_detail.html'
-
-
-class QuestionCollectionUpdateView(generic.UpdateView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_form.html'
-    pk_url_kwarg = "pk"
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
@@ -89,7 +63,7 @@ class CategoryListView(generic.ListView):
     form_class = forms.CategoryForm
 
 
-class CategoryCreateView(generic.CreateView):
+class CategoryCreateView(IsRedactorMixin, generic.CreateView):
     model = models.Category
     form_class = forms.CategoryForm
 
@@ -99,7 +73,7 @@ class CategoryDetailView(generic.DetailView):
     form_class = forms.CategoryForm
 
 
-class CategoryUpdateView(generic.UpdateView):
+class CategoryUpdateView(IsRedactorMixin, generic.UpdateView):
     model = models.Category
     form_class = forms.CategoryForm
     pk_url_kwarg = "pk"
@@ -161,13 +135,6 @@ class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_detail.html'
-
-
-class QuestionFromUserUpdateView(generic.UpdateView):
-    model = models.QuestionFromUser
-    form_class = forms.QuestionFromUserForm
-    template_name = 'fakechecker/question_from_user_form.html'
-    pk_url_kwarg = "pk"
 
 
 class QuestionForExpertListView(generic.ListView):
