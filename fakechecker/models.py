@@ -86,7 +86,7 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     sources = models.TextField()
 
-    DELIMITER = ","
+    DELIMITER = "\n"
 
     class Meta:
         pass
@@ -136,7 +136,7 @@ class Question(models.Model):
     sources = models.TextField(blank=True)
 
     # Constant
-    DELIMITER = ","
+    DELIMITER = "\n"
 
     class Meta:
         pass
