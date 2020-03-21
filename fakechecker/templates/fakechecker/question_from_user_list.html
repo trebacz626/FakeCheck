@@ -57,7 +57,7 @@
 
                 <span class="text-muted">{{ object.created|date }}</span>
 
-                <div class="mt-2>
+                <div>
                   <select class="selectpicker q-collection" multiple data-live-search="true" title="Kolekcje pytań">
                       {% for question_collection in question_collections%}
                           <option {% if object in question_collection.questions_from_user.all%}selected=""{%endif%}data-id="{{question_collection.id}}" data-questionid="{{object.id}}">{{question_collection.name}}</option>
