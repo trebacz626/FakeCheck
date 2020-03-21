@@ -57,31 +57,6 @@ class RedactorUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class QuestionCollectionListView(generic.ListView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_list.html'
-
-
-class QuestionCollectionCreateView(generic.CreateView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_form.html'
-
-
-class QuestionCollectionDetailView(generic.DetailView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_detail.html'
-
-
-class QuestionCollectionUpdateView(generic.UpdateView):
-    model = models.QuestionCollection
-    form_class = forms.QuestionCollectionForm
-    template_name = 'fakechecker/question_collection_form.html'
-    pk_url_kwarg = "pk"
-
-
 class ReviewListView(generic.ListView):
     model = models.Review
     form_class = forms.ReviewForm
