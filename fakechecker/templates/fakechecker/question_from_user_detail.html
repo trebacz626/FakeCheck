@@ -7,7 +7,7 @@
         </div>
         <h1 class="text-center mt-4 mt-md-0">{{ object.title }}</h1>
         <p class="text-muted text-center">{{ object.created|date }}</p>
-        <div class="collapse text-muted mt-4" id="collapseDescription">
+        <div class=" text-muted mt-4">
             <p>{{ object.content }}</p>
             {% if object.list_of_sources %}
                 <h4>Źródła:</h4>
@@ -18,9 +18,6 @@
                 </ul>
             {% endif %}
 
-        </div>
-        <div class="text-muted text-right pr-4 mt-3 js-text-change cursor-pointer" data-toggle="collapse" href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
-            Więcej...
         </div>
         <div class="row p-4">
             {% for category in object.categories.all %}

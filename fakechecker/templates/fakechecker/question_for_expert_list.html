@@ -28,6 +28,9 @@
         </form>
     </div>
     <div class="p-1">
+    {% if user.redactor or user.is_superuser %}
+        <a class="btn btn-outline-dark w-100 mb-2" href="{% url 'QuestionForExpert_create' %}">Utwórz nowe pytanie dla eksperta</a>
+    {% endif %}
     {% for object in object_list %}
         <div class="border hover-dark p-3 m-1 row">
             <div class="col-12 col-md-8">
