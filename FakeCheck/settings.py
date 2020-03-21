@@ -128,4 +128,4 @@ STATICFILES_DIRS = (
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = "fakechecker_QuestionForExpert_list"
+LOGIN_REDIRECT_URL = "QuestionForExpert_list"

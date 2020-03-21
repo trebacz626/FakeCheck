@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.views import generic, View
 from django.contrib.auth.decorators import login_required
@@ -9,44 +11,56 @@ from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberO
     HasExpertAddedReviewMixin, IsExpertMixin
 from django.contrib.auth import views as auth_views
 
+def superuser_required():
+    def wrapper(wrapped):
+        class WrappedClass(UserPassesTestMixin, wrapped):
+            def test_func(self):
+                return self.request.user.is_superuser
 
-class ExpertListView(generic.ListView):
+        return WrappedClass
+    return wrapper
+
+
+class ExpertListView(LoginRequiredMixin, generic.ListView):
     model = models.Expert
     form_class = forms.ExpertForm
 
 
+@superuser_required()
 class ExpertCreateView(generic.CreateView):
     model = models.Expert
     form_class = forms.ExpertForm
 
 
-class ExpertDetailView(generic.DetailView):
+class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
     form_class = forms.ExpertForm
 
 
+@superuser_required()
 class ExpertUpdateView(generic.UpdateView):
     model = models.Expert
     form_class = forms.ExpertForm
     pk_url_kwarg = "pk"
 
 
-class RedactorListView(generic.ListView):
+class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
     form_class = forms.RedactorForm
 
 
+@superuser_required()
 class RedactorCreateView(generic.CreateView):
     model = models.Redactor
     form_class = forms.RedactorForm
 
 
-def RedactorDetailView(IsRedactorMixin, request, pk,):
-    user = models.Redactor.objects.get(id=pk)
-    title = models.QuestionForExpert.objects.filter(redactor=user)
-    return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title})
+class RedactorDetailView(generic.DetailView):
+    model = models.Redactor
+    form_class = forms.RedactorForm
 
 
+@superuser_required()
 class RedactorUpdateView(generic.UpdateView):
     model = models.Redactor
     form_class = forms.RedactorForm
@@ -76,11 +90,6 @@ class QuestionCollectionUpdateView(generic.UpdateView):
     form_class = forms.QuestionCollectionForm
     template_name = 'fakechecker/question_collection_form.html'
     pk_url_kwarg = "pk"
-
-
-class ReviewListView(generic.ListView):
-    model = models.Review
-    form_class = forms.ReviewForm
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
@@ -262,13 +271,21 @@ class QuestionForExpertCreateView(LoginRequiredMixin, IsRedactorMixin, View):
         )
         expert_question.save()
         expert_question.categories.set(request.POST.getlist('categories'))
-        return redirect("fakechecker_QuestionForExpert_list")
+        return redirect("QuestionForExpert_list")
 
 
 class QuestionForExpertDetailView(generic.DetailView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
     template_name = 'fakechecker/question_for_expert_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionForExpertDetailView, self).get_context_data(**kwargs)
+        try:
+            context['expert_posted'] = context['object'].review_set.filter(expert_id=self.request.user.expert).count()
+        except:
+            context['expert_posted'] = 0
+        return context
 
 
 class QuestionForExpertUpdateView(LoginRequiredMixin,
@@ -295,7 +312,7 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
         expert_question.sources = request.POST.get('sources')
         expert_question.save()
         expert_question.categories.set(request.POST.getlist('categories'))
-        return redirect("fakechecker_QuestionForExpert_list")
+        return redirect("QuestionForExpert_list")
 
 
 class LoginView(auth_views.LoginView):
@@ -304,3 +321,11 @@ class LoginView(auth_views.LoginView):
 
 class LogoutView(auth_views.LogoutView):
     template_name = "fakechecker/logout.html"
+
+    def get_next_page(self):
+        next_page = super(LogoutView, self).get_next_page()
+        messages.add_message(
+            self.request, messages.SUCCESS,
+            'You successfully log out!'
+        )
+        return next_page

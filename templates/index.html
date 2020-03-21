@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="m-2"><h4>fake-checker</h4></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_Expert_list' %}">Expert Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_Redactor_list' %}">Redactor Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_QuestionCollection_list' %}">QuestionCollection Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_Review_list' %}">Review Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_Category_list' %}">Category Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_QuestionFromUser_list' %}">QuestionFromUser Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'fakechecker_QuestionForExpert_list' %}">QuestionForExpert Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'Expert_list' %}">Expert Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'Redactor_list' %}">Redactor Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'QuestionCollection_list' %}">QuestionCollection Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'Category_list' %}">Category Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'QuestionFromUser_list' %}">QuestionFromUser Listing</a></div>
+<div class="m-2"><a class="btn btn-light" href="{% url 'QuestionForExpert_list' %}">QuestionForExpert Listing</a></div>
 {% endblock %}
