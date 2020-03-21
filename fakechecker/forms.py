@@ -1,6 +1,5 @@
 from django import forms
 from . import models
-from .validators import validate_curse_pl
 
 
 class ExpertForm(forms.ModelForm):
@@ -80,14 +79,6 @@ class QuestionFromUserForm(forms.ModelForm):
             "categories",
             "sources",
         ]
-
-    def clean(self):
-        cleaned_data = super(QuestionFromUserForm, self).clean()
-        return validate_curse_pl(cleaned_data.get('title'))
-
-    def clean(self):
-        cleaned_data = super(QuestionFromUserForm, self).clean()
-        return validate_curse_pl(cleaned_data.get('content'))
 
     def clean_sources(self):
         sources = self.cleaned_data.get('sources')
