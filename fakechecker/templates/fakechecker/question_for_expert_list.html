@@ -63,7 +63,7 @@
                     </div>
 
                 </div>
-                <p class="text-muted text-center mt-2 m-0">Opini: {{ object.review_set.all.count }} ({{ object.get_real_percentage }}%)</p>
+                <p class="text-muted text-center mt-2 m-0">Opini: {{ object.review_set.all.count }} {% if object.review_set.all.count is not 0 %} ({{ object.get_real_percentage }}% zgadza się) {% endif %}</p>
             </div>
         </div>
     {% empty %}
