@@ -13,28 +13,56 @@
         <a class="btn btn-outline-dark p-3" href="{{object.get_update_url}}">Edit</a>
     {% endif %}
     </h1>
-{#<div class="card row m-2 mt-4">#}
-{#    <p class="text-muted pt-2 pl-3 h5">Sortowanie i filtry:</p>#}
-{#    <form method="get" action="{% url 'Category_detail' object.name %}" class="input-group">#}
-{#        <div class="col-12 col-sm-4 mb-3">#}
-{#            <select name="order" class="custom-select">#}
-{#                {%  for order in orders %}#}
-{#                    <option value="{{ order }}"  {% if order == prev_order %}selected{% endif %}>{{ order }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#        <input type="hidden" name="category" value="{{ category.name }}">#}
-{#        <div class="col-12 col-sm-4 mb-3">#}
-{#            <input type="text" name="title" class="form-control" placeholder="Tytuł..." value="{{ title }}">#}
-{#        </div>#}
-{#        <div class="col-12 col-sm-4">#}
-{#            <button class="btn btn-outline-dark w-100">Szukaj</button>#}
-{#        </div>#}
-{#    </form>#}
-{#</div>#}
+<div class="card row m-2 mt-4">
+    <p class="text-muted pt-2 pl-3 h5">Sortowanie i filtry:</p>
+    <form method="get" action="{% url 'Category_detail' object.name %}" class="input-group">
+        <div class="col-12 col-sm-4 mb-3">
+            <select name="order" class="custom-select">
+                {%  for order in orders %}
+                    <option value="{{ order }}"  {% if order == prev_order %}selected{% endif %}>{{ order }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="hidden" name="category" value="{{ category.name }}">
+        <div class="col-12 col-sm-4 mb-3">
+            <input type="text" name="title" class="form-control" placeholder="Tytuł..." value="{{ title }}">
+        </div>
+        <div class="col-12 col-sm-4">
+            <button class="btn btn-outline-dark w-100">Szukaj</button>
+        </div>
+    </form>
+</div>
 <div class="p-1">
-{% for question in object.questions.all %}
-    {% if not question.is_for_expert %}
+{% if user.is_authenticated and user.redactor %}
+    <div class="text-center"><h3>Od użytkowników: </h3></div>
+    {% for question in questions %}
+        {% if not question.questionforexpert %}
+        <div class="border hover-dark p-3 m-1 row">
+            <div class="col-12 col-md-8">
+                <a href="{{question.get_absolute_url}}" class="no-decoration">
+                    <p class="h5 text-muted">{{question.title}}</p>
+                </a>
+                {% for category in question.categories.all %}
+                    <a href="{{ category.get_absolute_url }}" class="badge badge-dark p-1 mr-1">
+                        {% if category.fa_icon_class %}
+                            <i class="{{ category.fa_icon_class }}"></i>
+                        {% endif %}
+                        {{ category }}
+                    </a>
+                {% endfor %}
+                <span class="text-muted">{{ question.created|date }}</span>
+            {% if user.expert %}
+                <a class="text-muted" href="{{ question.redactor.get_absolute_url }}">Redaktor: {{ question.redactor.user.first_name }} {{ question.redactor.user.last_name }}</a>
+            {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    {%  endfor %}
+    <div class="text-center"><h3>Dla ekspertów: </h3></div>
+{% endif %}
+
+{% for question in questions %}
+    {% if question.questionforexpert %}
     <div class="border hover-dark p-3 m-1 row">
         <div class="col-12 col-md-8">
             <a href="{{question.get_absolute_url}}" class="no-decoration">
