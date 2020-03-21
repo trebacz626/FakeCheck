@@ -276,7 +276,6 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
 
     def get(self, request, **kwargs):
         object = get_object_or_404(models.QuestionForExpert, pk=kwargs['pk'])
-        print(object.categories.all())
         return render(request, 'fakechecker/question_for_expert_form.html', {
             'question_for_expert_form': forms.QuestionForExpertForm(initial={
                 'title': object.title,
@@ -286,8 +285,14 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
             }),
         })
 
-    def post(self, request):
-        pass
+    def post(self, request, **kwargs):
+        expert_question = get_object_or_404(models.QuestionForExpert, pk=kwargs['pk'])
+        expert_question.title = request.POST.get('title')
+        expert_question.content = request.POST.get('content')
+        expert_question.sources = request.POST.get('sources')
+        expert_question.save()
+        expert_question.categories.set(request.POST.getlist('categories'))
+        return redirect("fakechecker_QuestionForExpert_list")
 
 
 class LoginView(auth_views.LoginView):

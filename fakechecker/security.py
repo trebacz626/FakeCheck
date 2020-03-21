@@ -54,7 +54,7 @@ class IsNumberOfReviewsExceededMixin(AccessMixin):
 
     def dispatch(self, request, *args, **kwargs):
         question = get_object_or_404(QuestionForExpert, pk=kwargs['pk'])
-        if question.reviews.count() >= MIN_REVIEWS_FOR_PUBLIC_QUESTION:
+        if hasattr(question, 'reviews') and question.reviews.count() >= MIN_REVIEWS_FOR_PUBLIC_QUESTION:
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
