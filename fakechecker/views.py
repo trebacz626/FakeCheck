@@ -185,13 +185,11 @@ class QuestionFromUserListView(IsRedactorMixin, generic.ListView):
         return context
 
 
-def QuestionFromUserCreateView(request):
-    form = forms.QuestionFromUserForm(request.POST or None)
+class QuestionFromUserCreateView(generic.CreateView):
+    model = models.QuestionFromUser
+    form_class = forms.QuestionFromUserForm
+    template_name = 'fakechecker/question_from_user_form.html'
 
-    if form.is_valid():
-        form.save()
-
-    return render(request, 'fakechecker/question_from_user_form.html', {'form': form})
 
 class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser
@@ -323,6 +321,7 @@ class LogoutView(auth_views.LogoutView):
             'You successfully log out!'
         )
         return next_page
+
 
 def ExpertHowToBe(request):
     return render(request, "fakechecker/expert_how_to_be.html")
