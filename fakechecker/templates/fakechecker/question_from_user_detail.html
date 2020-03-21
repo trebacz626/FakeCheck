@@ -1,16 +1,42 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+    <div class="card p-2 p-md-4 mt-4 js-question-details">
+        <div>
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-outline-dark pl-3 pr-3">Powrót</a>
+        </div>
+        <h1 class="text-center mt-4 mt-md-0">{{ object.title }}</h1>
+        <p class="text-muted text-center">{{ object.created|date }}</p>
+        <div class="collapse text-muted mt-4" id="collapseDescription">
+            <p>{{ object.content }}</p>
+            {% if object.list_of_sources %}
+                <h4>Źródła:</h4>
+                <ul>
+                    {% for source in object.list_of_sources %}
+                    <li><a href="{{ source }}">{{ source }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
-<p>
-    <a class="btn btn-light" href="{% url 'QuestionFromUser_list' %}">
-    QuestionFromUser Listing
-    </a>
-</p>
-
-<table class="table">
-    <tr><td>is_read</td><td>{{ object.is_read }}</td></tr>
-</table>
-<a class="btn btn-outline-dark" href="{{object.get_update_url}}">Edit</a>
-
+        </div>
+        <div class="text-muted text-right pr-4 mt-3 js-text-change cursor-pointer" data-toggle="collapse" href="#collapseDescription" role="button" aria-expanded="false" aria-controls="collapseDescription">
+            Więcej...
+        </div>
+        <div class="row p-4">
+            {% for category in object.categories.all %}
+                <a href="{{ category.get_absolute_url }}" class="badge badge-dark p-2 m-1">
+                    {% if category.fa_icon_class %}
+                        <i class="{{ category.fa_icon_class }}"></i>
+                    {% endif %}
+                    {{ category }}
+                </a>
+            {% endfor %}
+        {% if object.is_read %}
+            <a class="badge badge-success p-2 m-1">Przetworzono</a>
+        {% else %}
+            <a class="badge badge-danger p-2 m-1">Nieprzetworzono</a>
+        {% endif %}
+        </div>
+    </div>
+    <a class="btn btn-outline-dark w-100" href="{{object.get_update_url}}">Edytuj</a>
 {% endblock %}

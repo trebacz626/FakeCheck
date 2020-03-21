@@ -160,6 +160,9 @@ class QuestionFromUser(Question):
     def get_update_url(self):
         return reverse("QuestionFromUser_update", args=(self.pk,))
 
+    def is_for_expert(self):
+        return True
+
 
 class QuestionForExpert(Question):
     # Fields
@@ -196,3 +199,6 @@ class QuestionForExpert(Question):
 
     def increment_view(self):
         QuestionForExpert.objects.filter(id=self.id).update(views=F('views') + 1)
+
+    def is_for_expert(self):
+        return True

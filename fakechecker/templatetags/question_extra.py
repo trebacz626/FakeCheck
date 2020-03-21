@@ -8,3 +8,4 @@ def increment_view(object):
     if type(object) is QuestionForExpert:
         object.increment_view()
     return ""
+

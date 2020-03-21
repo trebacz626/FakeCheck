@@ -6,7 +6,10 @@
     <tr>
       <th scope="col">Kategoria</th>
       <th scope="col">Ikona</th>
-      <th scope="col">Edytuj</th>
+      <th scope="col">Szczegóły</th>
+      {% if user.redactor or user.is_superuser %}
+          <th scope="col">Edytuj</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -18,10 +21,15 @@
             <i class="{{ object.fa_icon_class }}"></i>
           {% endif %}
       </td>
-      <td><a href="{{object.get_update_url}}">Edytuj</a></td>
+      <td><a href="{{object.get_absolute_url}}">Więcej...</a></td>
+      {% if user.redactor or user.is_superuser %}
+        <td><a href="{{object.get_update_url}}">Edytuj</a></td>
+      {% endif %}
     </tr>
   {% endfor %}
   </tbody>
 </table>
-<div><a class="btn btn-outline-dark" href="{% url 'Category_create' %}">Create a new Category</a></div>
+    {% if user.redactor or user.is_superuser %}
+        <a class="btn btn-outline-dark w-100" href="{% url 'Category_create' %}">Utwórz nową kategorię</a>
+    {% endif %}
 {% endblock %}

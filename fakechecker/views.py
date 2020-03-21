@@ -102,11 +102,6 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
         return super().form_invalid(form)
 
 
-class ReviewDetailView(generic.DetailView):
-    model = models.Review
-    form_class = forms.ReviewForm
-
-
 class ReviewUpdateView(generic.UpdateView):
     model = models.Review
     form_class = forms.ReviewForm
