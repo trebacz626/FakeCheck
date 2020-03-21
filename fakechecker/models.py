@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.db.models import F
+from model_utils.managers import InheritanceManager
 
 
 class Expert(models.Model):
@@ -124,7 +125,7 @@ class Category(models.Model):
 class Question(models.Model):
     # Relationships
     categories = models.ManyToManyField("fakechecker.Category", related_name="questions", blank=False)
-
+    objects = InheritanceManager()
     # Fields
     title = models.CharField(max_length=180)
     content = models.TextField(max_length=1000)

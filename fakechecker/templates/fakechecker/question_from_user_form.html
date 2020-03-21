@@ -2,16 +2,17 @@
 {% load static %}
 {% block content %}
 {% load crispy_forms_tags %}
+    <h1 class="m-3 text-center">Zadaj pytanie:</h1>
     <form method="post" enctype="multipart/form-data">
         {%  csrf_token %}
         {{ form|crispy}}
         <br>
-        *Pola wymagane.
+        <strong>*Pola wymagane.</strong>
         <br>
         W źródłach powinny się znajdować tylko linki.
         <br>
         Linki oddzielaj ",", na przykład "https://fake-check.akai.org.pl/, https://www.hackcrisis.com/".
         <br>
-        <input type="submit" value="Wyślij" class="btn btn-outline-dark">
+        <input type="submit" value="Wyślij" class="btn btn-outline-dark w-100">
     </form>
 {% endblock %}

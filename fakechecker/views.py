@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.urls import reverse
 from django.views import generic, View
 from . import models
 from . import forms
@@ -14,37 +15,53 @@ from django.contrib.auth import views as auth_views
 class ExpertListView(LoginRequiredMixin, generic.ListView):
     model = models.Expert
     form_class = forms.ExpertForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
 
 
 class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
     form_class = forms.ExpertForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
 
 
 class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
     form_class = forms.RedactorForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
 
 
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
     model = models.Review
     form_class = forms.ReviewForm
+    template_name = 'fakechecker/review_create.html'
+
+    def get_success_url(self):
+        return reverse('QuestionForExpert_detail', kwargs={'pk': self.kwargs['question_for_expert_id']})
 
     def get_context_data(self, **kwargs):
+        print(self.request)
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
-        context['question_for_expert'] = self.question_for_expert
+        context['question_for_expert'] = get_object_or_404(models.QuestionForExpert, pk=self.kwargs['question_for_expert_id'])
         return context
 
     def form_valid(self, form, *args, **kwargs):
         question_for_expert = get_object_or_404(models.QuestionForExpert, id=self.kwargs['question_for_expert_id'])
         self.object = form.save(commit=False)
         self.object.question_for_expert = question_for_expert
-        self.object.expert = self.expert
+        self.object.expert = self.request.user.expert
         self.object.save()
         return super().form_valid(form)
 
@@ -71,6 +88,25 @@ class CategoryCreateView(IsRedactorMixin, generic.CreateView):
 class CategoryDetailView(generic.DetailView):
     model = models.Category
     form_class = forms.CategoryForm
+    template_name = 'fakechecker/category_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        context['prev_order'] = self.request.GET.get('order', 'created')
+        context['title'] = self.request.GET.get('title', '')
+        category = self.kwargs['pk']
+        context['orders'] = ('Od najnowszego', 'Od najstarszego')
+        new_context = models.Question.objects.select_subclasses()
+        if category != '':
+            new_context = new_context.filter(categories__in=[category])
+        if context['title'] != '':
+            new_context = new_context.filter(title__icontains=context['title'])
+        if context['prev_order'] == 'Od najnowszego':
+            new_context = new_context.order_by('created')
+        elif context['prev_order'] == 'Od najstarszego':
+            new_context = new_context.order_by('-created')
+        context['questions'] = new_context
+        return context
 
 
 class CategoryUpdateView(IsRedactorMixin, generic.UpdateView):
@@ -167,7 +203,6 @@ class QuestionForExpertListView(generic.ListView):
             new_context = new_context.annotate(num_reviews=Count('review')).order_by('-num_reviews')
         elif order == 'Najmniej oceniane':
             new_context = new_context.annotate(num_reviews=Count('review')).order_by('num_reviews')
-
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -185,6 +220,8 @@ class QuestionForExpertListView(generic.ListView):
 
 
 class QuestionForExpertCreateView(LoginRequiredMixin, IsRedactorMixin, View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
 
     def get(self, request):
         return render(request, 'fakechecker/question_for_expert_form.html', {
@@ -222,6 +259,8 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
                                   IsRedactorQuestionsAuthorMixin,
                                   IsNumberOfReviewsExceededMixin,
                                   View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
 
     def get(self, request, **kwargs):
         object = get_object_or_404(models.QuestionForExpert, pk=kwargs['pk'])
