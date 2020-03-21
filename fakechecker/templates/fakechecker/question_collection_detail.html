@@ -18,7 +18,7 @@
                     <p class="h5 text-muted">{{question.title}}</p>
                 </a>
                 {% for category in question.categories.all %}
-                    <a href="" class="badge badge-dark p-1 mr-1">
+                    <a href="{{ category.get_absolute_url }}" class="badge badge-dark p-1 mr-1">
                         {% if category.fa_icon_class %}
                             <i class="{{ category.fa_icon_class }}"></i>
                         {% endif %}

@@ -1,7 +1,25 @@
 
 {% extends "base.html" %}
 {% block content %}
-{% for object in object_list %}
-  <div class="m-2"><a href="{{object.get_absolute_url}}">{{object}}</a></div>
-{% endfor %}
+<h1 class="text-center">Redaktorzy:</h1>
+<table class="table table-hover mt-3">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Imie</th>
+      <th scope="col">Nazwisko</th>
+      <th scope="col">E-Mail</th>
+      <th scope="col">Szczegóły...</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for object in object_list %}
+    <tr>
+      <td>{{ object.user.first_name }}</td>
+      <td>{{ object.user.last_name }}</td>
+      <td>{{ object.user.email }}</td>
+      <td><a href="{{object.get_absolute_url}}">Więcej...</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
