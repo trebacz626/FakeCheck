@@ -71,6 +71,25 @@ class CategoryCreateView(IsRedactorMixin, generic.CreateView):
 class CategoryDetailView(generic.DetailView):
     model = models.Category
     form_class = forms.CategoryForm
+    template_name = 'fakechecker/category_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        context['prev_order'] = self.request.GET.get('order', 'created')
+        context['title'] = self.request.GET.get('title', '')
+        category = self.kwargs['pk']
+        context['orders'] = ('Od najnowszego', 'Od najstarszego')
+        new_context = models.Question.objects.select_subclasses()
+        if category != '':
+            new_context = new_context.filter(categories__in=[category])
+        if context['title'] != '':
+            new_context = new_context.filter(title__icontains=context['title'])
+        if context['prev_order'] == 'Od najnowszego':
+            new_context = new_context.order_by('created')
+        elif context['prev_order'] == 'Od najstarszego':
+            new_context = new_context.order_by('-created')
+        context['questions'] = new_context
+        return context
 
 
 class CategoryUpdateView(IsRedactorMixin, generic.UpdateView):
@@ -167,7 +186,6 @@ class QuestionForExpertListView(generic.ListView):
             new_context = new_context.annotate(num_reviews=Count('review')).order_by('-num_reviews')
         elif order == 'Najmniej oceniane':
             new_context = new_context.annotate(num_reviews=Count('review')).order_by('num_reviews')
-
         return new_context
 
     def get_context_data(self, **kwargs):
