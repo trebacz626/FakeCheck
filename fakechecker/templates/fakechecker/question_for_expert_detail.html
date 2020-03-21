@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+    {% load question_extra %}
+    {% increment_view object %}
     <div class="card p-2 p-md-4 mt-4 js-question-details">
         <div>
             <a href="{{request.META.HTTP_REFERER}}" class="btn btn-outline-dark pl-3 pr-3">Powrót</a>

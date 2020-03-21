@@ -1,10 +1,13 @@
-from django.views import generic
-from django.shortcuts import render,redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
+from django.views import generic, View
 from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
-from django.shortcuts import get_object_or_404
-from .security import IsExpertMixin,HasExpertAddedReviewMixin
+from django.shortcuts import render, redirect, get_object_or_404
+from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberOfReviewsExceededMixin, \
+    HasExpertAddedReviewMixin, IsExpertMixin
+from django.contrib.auth import views as auth_views
 
 
 class ExpertListView(generic.ListView):
@@ -81,13 +84,15 @@ class ReviewListView(generic.ListView):
     form_class = forms.ReviewForm
 
 
-class ReviewCreateView(IsExpertMixin,HasExpertAddedReviewMixin,generic.CreateView):
+class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
     model = models.Review
     form_class = forms.ReviewForm
+
     def get_context_data(self, **kwargs):
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
         context['question_for_expert'] = self.question_for_expert
         return context
+
     def form_valid(self, form, *args, **kwargs):
         question_for_expert = get_object_or_404(models.QuestionForExpert, id=self.kwargs['question_for_expert_id'])
         self.object = form.save(commit=False)
@@ -152,7 +157,7 @@ class QuestionFromUserListView(generic.ListView):
         elif is_read == 'Tylko przeczytane':
             new_context = new_context.filter(is_read=True)
         if title != '':
-            new_context = new_context.filter(title__contains=title)
+            new_context = new_context.filter(title__icontains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
@@ -207,12 +212,21 @@ class QuestionForExpertListView(generic.ListView):
             new_context = new_context.filter(categories__in=[category])
 
         if title != '':
-            new_context = new_context.filter(title__contains=title)
+            new_context = new_context.filter(title__icontains=title)
 
         if order == 'Od najnowszego':
             new_context = new_context.order_by('created')
         elif order == 'Od najstarszego':
             new_context = new_context.order_by('-created')
+        elif order == 'Najpopularniejsze':
+            new_context = new_context.order_by('-views')
+        elif order == 'Najmniej popularne':
+            new_context = new_context.order_by('views')
+        elif order == 'Najbardziej oceniane':
+            new_context = new_context.annotate(num_reviews=Count('review')).order_by('-num_reviews')
+        elif order == 'Najmniej oceniane':
+            new_context = new_context.annotate(num_reviews=Count('review')).order_by('num_reviews')
+
         return new_context
 
     def get_context_data(self, **kwargs):
@@ -221,17 +235,31 @@ class QuestionForExpertListView(generic.ListView):
         context['title'] = self.request.GET.get('title', '')
         context['prev_read'] = self.request.GET.get('read', '')
         context['prev_category'] = self.request.GET.get('category', '')
-        context['orders'] = ('Od najnowszego', 'Od najstarszego')
+        context['orders'] = (
+            'Od najnowszego', 'Od najstarszego', 'Najpopularniejsze', 'Najmniej popularne', 'Najbardziej oceniane',
+            'Najmniej oceniane')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
         return context
 
 
+class QuestionForExpertCreateView(LoginRequiredMixin, IsRedactorMixin, View):
 
-class QuestionForExpertCreateView(generic.CreateView):
-    model = models.QuestionForExpert
-    form_class = forms.QuestionForExpertForm
-    template_name = 'fakechecker/question_for_expert_form.html'
+    def get(self, request):
+        return render(request, 'fakechecker/question_for_expert_form.html', {
+            'question_for_expert_form': forms.QuestionForExpertForm,
+        })
+
+    def post(self, request):
+        expert_question = models.QuestionForExpert(
+            title=request.POST.get('title'),
+            content=request.POST.get('content'),
+            sources=request.POST.get('sources'),
+            redactor=request.user.redactor,
+        )
+        expert_question.save()
+        expert_question.categories.set(request.POST.getlist('categories'))
+        return redirect("fakechecker_QuestionForExpert_list")
 
 
 class QuestionForExpertDetailView(generic.DetailView):
@@ -240,8 +268,36 @@ class QuestionForExpertDetailView(generic.DetailView):
     template_name = 'fakechecker/question_for_expert_detail.html'
 
 
-class QuestionForExpertUpdateView(generic.UpdateView):
-    model = models.QuestionForExpert
-    form_class = forms.QuestionForExpertForm
-    pk_url_kwarg = "pk"
-    template_name = 'fakechecker/question_for_expert_form.html'
+class QuestionForExpertUpdateView(LoginRequiredMixin,
+                                  IsRedactorMixin,
+                                  IsRedactorQuestionsAuthorMixin,
+                                  IsNumberOfReviewsExceededMixin,
+                                  View):
+
+    def get(self, request, **kwargs):
+        object = get_object_or_404(models.QuestionForExpert, pk=kwargs['pk'])
+        return render(request, 'fakechecker/question_for_expert_form.html', {
+            'question_for_expert_form': forms.QuestionForExpertForm(initial={
+                'title': object.title,
+                'content': object.content,
+                'sources': object.sources,
+                'categories': object.categories.all(),
+            }),
+        })
+
+    def post(self, request, **kwargs):
+        expert_question = get_object_or_404(models.QuestionForExpert, pk=kwargs['pk'])
+        expert_question.title = request.POST.get('title')
+        expert_question.content = request.POST.get('content')
+        expert_question.sources = request.POST.get('sources')
+        expert_question.save()
+        expert_question.categories.set(request.POST.getlist('categories'))
+        return redirect("fakechecker_QuestionForExpert_list")
+
+
+class LoginView(auth_views.LoginView):
+    template_name = "fakechecker/login.html"
+
+
+class LogoutView(auth_views.LogoutView):
+    template_name = "fakechecker/logout.html"

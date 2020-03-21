@@ -39,7 +39,8 @@ class ReviewForm(forms.ModelForm):
             "is_info_fake",
             "sources"
         ]
-        exclude = ['created','last_updated']
+        exclude = ['created', 'last_updated']
+
     def clean_sources(self):
         sources = self.cleaned_data.get('sources')
         if (sources.count(' /') > 0 or sources.count('/ ') > 0 or sources.count('i ') > 0 or sources.count(
@@ -62,7 +63,12 @@ class CategoryForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = models.QuestionFromUser
-        fields = ["title", "content", "categories", "sources"]
+        fields = [
+            "title",
+            "content",
+            "categories",
+            "sources"
+        ]
 
     def clean_sources(self):
         sources = self.cleaned_data.get('sources')
@@ -86,5 +92,17 @@ class QuestionForExpertForm(forms.ModelForm):
     class Meta:
         model = models.QuestionForExpert
         fields = [
-            "redactor",
+            "title",
+            "content",
+            "sources",
+            "categories",
         ]
+        labels = {
+            'title': "Tytuł",
+            'content': "Treść",
+            'sources': "Źródła",
+            'categories': "Kategorie",
+        }
+        widgets = {
+            'sources': forms.Textarea(attrs={'rows': 4, 'style': 'resize:none;'})
+        }
