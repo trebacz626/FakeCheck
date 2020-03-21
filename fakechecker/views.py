@@ -58,7 +58,7 @@ class ReviewUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class CategoryListView(generic.ListView):
+class CategoryListView(IsRedactorMixin, generic.ListView):
     model = models.Category
     form_class = forms.CategoryForm
 
