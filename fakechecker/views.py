@@ -19,7 +19,6 @@ class ExpertListView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'redirect_to'
 
 
-
 class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
     form_class = forms.ExpertForm
@@ -34,13 +33,11 @@ class RedactorListView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'redirect_to'
 
 
-
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
     login_url = '/login'
     redirect_field_name = 'redirect_to'
-
 
     def get_context_data(self, **kwargs):
         context = super(RedactorDetailView, self).get_context_data(**kwargs)
@@ -53,7 +50,6 @@ class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
         context['categories'] = models.Category.objects.all()
 
         new_context = models.QuestionForExpert.objects.filter(redactor=self.kwargs['pk'])
-
         if context['prev_category'] != '':
             new_context = new_context.filter(categories__in=[context['prev_category']])
         if context['title'] != '':
@@ -85,7 +81,8 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
     def get_context_data(self, **kwargs):
         print(self.request)
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
-        context['question_for_expert'] = get_object_or_404(models.QuestionForExpert, pk=self.kwargs['question_for_expert_id'])
+        context['question_for_expert'] = get_object_or_404(models.QuestionForExpert,
+                                                           pk=self.kwargs['question_for_expert_id'])
         return context
 
     def form_valid(self, form, *args, **kwargs):
@@ -192,7 +189,6 @@ class QuestionFromUserCreateView(generic.CreateView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_form.html'
-
 
 
 class QuestionFromUserDetailView(generic.DetailView):
