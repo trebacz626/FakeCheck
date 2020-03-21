@@ -1,5 +1,6 @@
 from django import forms
 from . import models
+from .validators import validate_curse_pl
 
 
 class ExpertForm(forms.ModelForm):
@@ -70,22 +71,34 @@ class QuestionForm(forms.ModelForm):
             "sources"
         ]
 
-    def clean_sources(self):
-        sources = self.cleaned_data.get('sources')
-        if (sources.count(' /') > 0 or sources.count('/ ') > 0 or sources.count('i ') > 0 or sources.count(
-                ' i') > 0) or (
-                len(sources) > 0 and (sources.count('.') == 0 or (sources.count(' ') > 0 and sources.count(',') == 0))):
-            raise forms.ValidationError('Zła forma wysłania linków.')
-        else:
-            return sources
-
 
 class QuestionFromUserForm(forms.ModelForm):
     class Meta:
         model = models.QuestionFromUser
         fields = [
-            "is_read",
+            "title",
+            "content",
+            "categories",
+            "sources",
         ]
+
+    def clean(self):
+        cleaned_data = super(QuestionFromUserForm, self).clean()
+        return validate_curse_pl(cleaned_data.get('title'))
+
+    def clean(self):
+        cleaned_data = super(QuestionFromUserForm, self).clean()
+        return validate_curse_pl(cleaned_data.get('content'))
+
+    def clean_sources(self):
+        sources = self.cleaned_data.get('sources')
+        if (sources.count(' /') > 0 or sources.count('/ ') > 0 or sources.count('i ') > 0 or sources.count(
+                ' i') > 0) or (
+                len(sources) > 0 and (
+                sources.count('.') == 0 or (sources.count(' ') > 0 and sources.count(',') == 0))):
+            raise forms.ValidationError('Zła forma wysłania linków.')
+        else:
+            return sources
 
 
 class QuestionForExpertForm(forms.ModelForm):

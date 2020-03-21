@@ -533,6 +533,7 @@
         "views": 1,
         "redactor": 1
     }
+<<<<<<< HEAD
 },
 {
     "model": "admin.logentry",
@@ -1685,5 +1686,7 @@
         "action_flag": 2,
         "change_message": "[]"
     }
+=======
+>>>>>>> b692b6b3b98920fd0a913873f0a2f81cf317d557
 }
 ]

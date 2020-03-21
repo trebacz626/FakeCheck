@@ -41,8 +41,7 @@ class RedactorCreateView(generic.CreateView):
     form_class = forms.RedactorForm
 
 
-@login_required
-def RedactorDetailView(request, pk):
+def RedactorDetailView(IsRedactorMixin, request, pk,):
     user = models.Redactor.objects.get(id=pk)
     title = models.QuestionForExpert.objects.filter(redactor=user)
     return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title})
@@ -178,10 +177,14 @@ class QuestionFromUserListView(generic.ListView):
         return context
 
 
-class QuestionFromUserCreateView(generic.CreateView):
-    model = models.QuestionFromUser
-    form_class = forms.QuestionFromUserForm
-    template_name = 'fakechecker/question_from_user_form.html'
+def QuestionFromUserCreateView(request):
+    form = forms.QuestionFromUserForm(request.POST or None)
+
+    if form.is_valid():
+        form.save()
+
+    return render(request, 'fakechecker/question_from_user_form.html', {'form': form})
+
 
 
 class QuestionFromUserDetailView(generic.DetailView):
