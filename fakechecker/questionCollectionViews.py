@@ -1,14 +1,10 @@
-from django.views import generic, View
-from django.shortcuts import render,redirect
-from django.contrib.auth.decorators import login_required
-from . import models
-from . import forms
-from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from django.core import serializers
-from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberOfReviewsExceededMixin, \
-    HasExpertAddedReviewMixin, IsExpertMixin,IsRedactorQuestionCollectionAuthorJSON
-from django.forms.models import model_to_dict
+from django.shortcuts import get_object_or_404
+from django.views import generic, View
+
+from . import forms
+from . import models
+from .security import IsRedactorMixin, IsRedactorQuestionCollectionAuthorJSON
 
 
 class QuestionCollectionListView(generic.ListView):
