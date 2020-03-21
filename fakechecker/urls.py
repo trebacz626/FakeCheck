@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from . import questionCollectionViews
 
 
 urlpatterns = (
@@ -13,6 +14,7 @@ urlpatterns = (
     path("expert/detail/<int:pk>/", views.ExpertDetailView.as_view(), name="Expert_detail"),
     path("expert/update/<int:pk>/", views.ExpertUpdateView.as_view(), name="Expert_update"),
 
+
     # Redactors
     path("redactor/", views.RedactorListView.as_view(), name="Redactor_list"),
     path("redactor/create/", views.RedactorCreateView.as_view(), name="Redactor_create"),
@@ -21,9 +23,10 @@ urlpatterns = (
 
     # Collections
     path("collection/", views.QuestionCollectionListView.as_view(), name="QuestionCollection_list"),
-    path("collection/create/", views.QuestionCollectionCreateView.as_view(), name="QuestionCollection_create"),
-    path("collection/detail/<int:pk>/", views.QuestionCollectionDetailView.as_view(), name="QuestionCollection_detail"),
-    path("collection/update/<int:pk>/", views.QuestionCollectionUpdateView.as_view(), name="QuestionCollection_update"),
+    path("collection/create/", questionCollectionViews.QuestionCollectionCreateView.as_view(), name="QuestionCollection_create"),
+    path("collection/detail/<int:pk>/", questionCollectionViews.QuestionCollectionDetailView.as_view(), name="QuestionCollection_detail"),
+    path("collection/<int:pk>/question/<int:question_id>/", questionCollectionViews.QuestionCollectionViewQuestion.as_view(), name="fakechecker_QuestionCollection_question"),
+
 
     # Reviews
     path("review/create/<int:question_for_expert_id>/", views.ReviewCreateView.as_view(), name="Review_create"),
