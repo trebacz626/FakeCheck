@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.views import generic, View
 from django.contrib.auth.decorators import login_required
@@ -241,7 +242,7 @@ class QuestionForExpertListView(generic.ListView):
         return context
 
 
-class QuestionForExpertCreateView(IsRedactorMixin, View):
+class QuestionForExpertCreateView(LoginRequiredMixin, IsRedactorMixin, View):
 
     def get(self, request):
         return render(request, 'fakechecker/question_for_expert_form.html', {
@@ -266,7 +267,8 @@ class QuestionForExpertDetailView(generic.DetailView):
     template_name = 'fakechecker/question_for_expert_detail.html'
 
 
-class QuestionForExpertUpdateView(IsRedactorMixin,
+class QuestionForExpertUpdateView(LoginRequiredMixin,
+                                  IsRedactorMixin,
                                   IsRedactorQuestionsAuthorMixin,
                                   IsNumberOfReviewsExceededMixin,
                                   View):
