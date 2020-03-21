@@ -19,7 +19,6 @@ class ExpertListView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'redirect_to'
 
 
-
 class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
     form_class = forms.ExpertForm
@@ -34,13 +33,41 @@ class RedactorListView(LoginRequiredMixin, generic.ListView):
     redirect_field_name = 'redirect_to'
 
 
-
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
     login_url = '/login'
     redirect_field_name = 'redirect_to'
 
+    def get_context_data(self, **kwargs):
+        context = super(RedactorDetailView, self).get_context_data(**kwargs)
+        context['prev_order'] = self.request.GET.get('order', 'created')
+        context['title'] = self.request.GET.get('title', '')
+        context['prev_category'] = self.request.GET.get('category', '')
+        context['orders'] = (
+            'Od najnowszego', 'Od najstarszego', 'Najpopularniejsze', 'Najmniej popularne', 'Najbardziej oceniane',
+            'Najmniej oceniane')
+        context['categories'] = models.Category.objects.all()
+
+        new_context = models.QuestionForExpert.objects.filter(redactor=self.kwargs['pk'])
+        if context['prev_category'] != '':
+            new_context = new_context.filter(categories__in=[context['prev_category']])
+        if context['title'] != '':
+            new_context = new_context.filter(title__icontains=context['title'])
+        if context['prev_order'] == 'Od najnowszego':
+            new_context = new_context.order_by('created')
+        elif context['prev_order'] == 'Od najstarszego':
+            new_context = new_context.order_by('-created')
+        elif context['prev_order'] == 'Najpopularniejsze':
+            new_context = new_context.order_by('-views')
+        elif context['prev_order'] == 'Najmniej popularne':
+            new_context = new_context.order_by('views')
+        elif context['prev_order'] == 'Najbardziej oceniane':
+            new_context = new_context.annotate(num_reviews=Count('review')).order_by('-num_reviews')
+        elif context['prev_order'] == 'Najmniej oceniane':
+            new_context = new_context.annotate(num_reviews=Count('review')).order_by('num_reviews')
+        context['questions'] = new_context
+        return context
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
@@ -54,7 +81,8 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
     def get_context_data(self, **kwargs):
         print(self.request)
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
-        context['question_for_expert'] = get_object_or_404(models.QuestionForExpert, pk=self.kwargs['question_for_expert_id'])
+        context['question_for_expert'] = get_object_or_404(models.QuestionForExpert,
+                                                           pk=self.kwargs['question_for_expert_id'])
         return context
 
     def form_valid(self, form, *args, **kwargs):
@@ -157,12 +185,13 @@ class QuestionFromUserListView(IsRedactorMixin, generic.ListView):
         return context
 
 
-class QuestionFromUserCreateView(generic.CreateView):
-    model = models.QuestionFromUser
-    form_class = forms.QuestionFromUserForm
-    template_name = 'fakechecker/question_from_user_form.html'
+def QuestionFromUserCreateView(request):
+    form = forms.QuestionFromUserForm(request.POST or None)
 
+    if form.is_valid():
+        form.save()
 
+    return render(request, 'fakechecker/question_from_user_form.html', {'form': form})
 
 class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser

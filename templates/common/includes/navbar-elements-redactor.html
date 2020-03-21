@@ -1,16 +1,22 @@
 {% if user.is_authenticated and user.redactor %}
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'QuestionCollection_list' %}#">Kolekcje pytań</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'Expert_list' %}#">Eksperci</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'Redactor_list' %}#">Redaktorzy</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'Category_list' %}#">Kategorie</a>
-</li>
 
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'QuestionFromUser_list' %} ">Zadane pytania</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'QuestionCollection_list' %}">Kolekcje pytań</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'Expert_list' %}">Eksperci</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'Redactor_list' %}">Redaktorzy</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'Category_list' %}">Kategorie</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{{  user.redactor.get_absolute_url}} ">Lista moich pytań</a>
+</li>
 
 {% endif %}
