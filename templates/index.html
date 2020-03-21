@@ -1,10 +1,29 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<div class="m-2"><h4>fake-checker</h4></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'Expert_list' %}">Expert Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'Redactor_list' %}">Redactor Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'QuestionCollection_list' %}">QuestionCollection Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'Category_list' %}">Category Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'QuestionFromUser_list' %}">QuestionFromUser Listing</a></div>
-<div class="m-2"><a class="btn btn-light" href="{% url 'QuestionForExpert_list' %}">QuestionForExpert Listing</a></div>
+    <div class="row p-3">
+        <div class="col-12">
+            <h1 class="text-center m-4"><span class="logo-icon">F</span>ake <span class="logo-icon">C</span>heck</h1>
+        </div>
+        <div class="col-12 col-sm-10 col-lg-4 offset-0 offset-sm-1 offset-lg-2 mt-1 order-2 order-lg-0">
+            <p class="h6">
+                Największą zmorą dzisiejszego użytkownika internetu są fake newsy. <br><br>
+                W dobie wszechobecnego dostępu do internetu, każdy człowiek jest w stanie publikować, co mu się żywnie zachce. Jednak bardzo łatwo jest trafić na informacje niesprawdzone, wyssane z palca.
+            </p>
+            <p class="h4">
+                Właśnie po to jest <span class="logo-icon">F</span>ake <span class="logo-icon">C</span>heck! <br>
+            </p>
+            <p class="h6">
+                Jest to platforma pozwalająca na zadawanie pytań do specjalistów w swoich dziedzinach, którzy nie dosyć, że odpowiedzą na twoje pytanie, czy dana rzecz jest prawdą czy fałszem, to jeszcze udostępnią ci materiały źródłowe!
+            </p>
+            <p class="h5">A więc drogi użytkowniku, śmiało! Zacznij weryfikować informacje!</p>
+            <p class="h6">A jeżeli jesteś ekspertem w jakiejś dziedzinie, <a href="">skontaktuj się z nami!</a></p>
+        </div>
+        <div class="col-12 col-sm-10 col-lg-4  offset-0 offset-sm-1 offset-lg-0 order-1 order-lg-0 mb-4">
+            <img src="{% static 'img/fake.jpg' %}" alt="" class="img-fluid">
+        </div>
+    <div class="col-12 col-md-10 col-lg-8 offset-0 offset-md-1 offset-lg-2 mt-4 order-3 order-lg-0">
+        <img src="{% static 'img/List.PNG' %}" alt="" class="img-fluid">
+    </div>
+    </div>
 {% endblock %}
