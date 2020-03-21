@@ -7,6 +7,7 @@ from . import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberOfReviewsExceededMixin, \
     HasExpertAddedReviewMixin, IsExpertMixin
+from django.contrib.auth import views as auth_views
 
 
 class ExpertListView(generic.ListView):
@@ -287,3 +288,11 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
 
     def post(self, request):
         pass
+
+
+class LoginView(auth_views.LoginView):
+    template_name = "fakechecker/login.html"
+
+
+class LogoutView(auth_views.LogoutView):
+    template_name = "fakechecker/logout.html"

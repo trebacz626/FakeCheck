@@ -1,5 +1,4 @@
 from django.urls import path, include
-
 from . import views
 
 
@@ -32,4 +31,6 @@ urlpatterns = (
     path("question/create/", views.QuestionForExpertCreateView.as_view(), name="fakechecker_QuestionForExpert_create"),
     path("question/detail/<int:pk>/", views.QuestionForExpertDetailView.as_view(), name="fakechecker_QuestionForExpert_detail"),
     path("question/update/<int:pk>/", views.QuestionForExpertUpdateView.as_view(), name="fakechecker_QuestionForExpert_update"),
+    path("login", views.LoginView.as_view(), name="login"),
+    path("logout", views.LogoutView.as_view(), name="logout"),
 )
