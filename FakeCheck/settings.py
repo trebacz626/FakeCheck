@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'fakechecker',
     'crispy_forms',
+    'snowpenguin.django.recaptcha2',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,6 @@ STATICFILES_DIRS = (
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = "QuestionForExpert_list"
+
+RECAPTCHA_PUBLIC_KEY = '6LdS8eIUAAAAAIGlLqEc0I6w83303_dyZnVHp3_a'
+RECAPTCHA_PRIVATE_KEY = '6LdS8eIUAAAAAKK-EK-D-aL0wSgQtHxllKQKzLA5'

@@ -47,7 +47,8 @@ class RedactorCreateView(generic.CreateView):
 def RedactorDetailView(request, pk):
     user = models.Redactor.objects.get(id=pk)
     title = models.QuestionForExpert.objects.filter(redactor=user)
-    return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title})
+    question_collections = models.QuestionCollection.objects.filter(redactor=user)
+    return render(request, 'fakechecker/redactor_detail.html', {'user': user, 'title': title, 'question_collections':question_collections})
 
 
 class RedactorUpdateView(generic.UpdateView):
@@ -81,6 +82,11 @@ class QuestionCollectionUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
+class ReviewListView(generic.ListView):
+    model = models.Review
+    form_class = forms.ReviewForm
+
+
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
     model = models.Review
     form_class = forms.ReviewForm
@@ -100,11 +106,6 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
 
     def form_invalid(self, form):
         return super().form_invalid(form)
-
-
-class ReviewDetailView(generic.DetailView):
-    model = models.Review
-    form_class = forms.ReviewForm
 
 
 class ReviewUpdateView(generic.UpdateView):
@@ -134,7 +135,7 @@ class CategoryUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class QuestionFromUserListView(generic.ListView):
+class QuestionFromUserListView(IsRedactorMixin,generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_list.html'
@@ -172,6 +173,7 @@ class QuestionFromUserListView(generic.ListView):
         context['orders'] = ('Od najnowszego', 'Od najstarszego')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
+        context['question_collections'] = models.QuestionCollection.objects.filter(redactor=self.request.user.redactor)
         return context
 
 

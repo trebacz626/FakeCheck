@@ -77,6 +77,7 @@ class QuestionCollectionAdmin(admin.ModelAdmin):
         "name",
         "redactor",
         "created",
+        "questions_from_user_list"
     ]
 
 
