@@ -1,5 +1,7 @@
 {% if user.is_authenticated and user.redactor %}
-
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'QuestionForExpert_list' %}">Lista pytań</a>
+</li>
 <li class="nav-item">
     <a class="nav-link" href="{% url 'QuestionFromUser_list' %} ">Zadane pytania</a>
 </li>

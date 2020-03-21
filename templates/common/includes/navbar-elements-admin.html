@@ -1,5 +1,8 @@
 {% if user.is_authenticated and user.is_superuser %}
 <li class="nav-item">
+    <a class="nav-link" href="{% url 'QuestionForExpert_list' %}">Lista pytań</a>
+</li>
+<li class="nav-item">
     <a class="nav-link" href="/admin">Panel administratora</a>
 </li>
 <li class="nav-item">
