@@ -2,4 +2,19 @@
 <li class="nav-item">
     <a class="nav-link" href="/admin">Panel administratora</a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'QuestionFromUser_list' %}#">Zgłoszone pytania</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'Redactor_list' %}#">Redaktorzy</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'Expert_list' %}#">Eksperci</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'QuestionCollection_list' %}#">Kolekcje pytań</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'Category_list' %}#">Kategorie</a>
+</li>
 {% endif %}

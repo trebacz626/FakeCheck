@@ -1,8 +1,9 @@
 {% load static %}
 <html>
   <head>
-    <title>{% block tiltle %}{% endblock %}</title>
+    <title>{% block tiltle %}FakeCheck{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <script>
         const csrf = '{{ csrf_token }}';
@@ -11,7 +12,14 @@
   <body>
     {% include 'common/includes/navbar.html' %}
     <div class="wrap" id="app">
-        <div class="container-fluid main-container">
+        <div class="container-fluid main-container mb-3">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-dark mt-3" role="alert">
+                      {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% block content %} {% endblock %}
         </div>
     </div>

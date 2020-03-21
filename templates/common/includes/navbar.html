@@ -3,8 +3,12 @@
   <button class="navbar-toggler pr-3 pt-2" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="navbar-collapse collapse bg-dark p-2 pt-3" id="nav-content">
+  <div class="navbar-collapse collapse bg-dark p-2 pt-3 text-center" id="nav-content">
     <ul class="navbar-nav nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'QuestionForExpert_list' %}">Lista pytań</a>
+        </li>
+
           {% include 'common/includes/navbar-elements-unauthenticated.html' %}
           {% include 'common/includes/navbar-elements-redactor.html' %}
           {% include 'common/includes/navbar-elements-expert.html' %}

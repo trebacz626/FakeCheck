@@ -1,9 +1,6 @@
 {% if not user.is_authenticated %}
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'fakechecker_QuestionForExpert_list' %}">Lista pytań</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'fakechecker_QuestionFromUser_create' %}">Zadaj pytanie!</a>
+    <a class="nav-link" href="{% url 'QuestionFromUser_create' %}">Zadaj pytanie!</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="">Zostań ekspertem</a>
