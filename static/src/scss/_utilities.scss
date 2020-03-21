@@ -17,3 +17,13 @@
   }
   transition: 0.15s;
 }
+
+.logo-icon{
+  color: #C62828;
+  font-weight: bold;
+}
+.navbar-brand{
+  &::after, &::before, &{
+      box-sizing: initial!important;
+  }
+}
