@@ -1,29 +1,27 @@
 {% load static %}
 <html>
   <head>
-    <title>{% block tiltle %}FakeCheck{% endblock %}</title>
+    <title>{% block tiltle %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
     <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
     <script>
         const csrf = '{{ csrf_token }}';
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="{% static 'requests.js' %}"></script>
   </head>
   <body>
     {% include 'common/includes/navbar.html' %}
     <div class="wrap" id="app">
-        <div class="container-fluid main-container mb-3">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-dark mt-3" role="alert">
-                      {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
+        <div class="container-fluid main-container">
             {% block content %} {% endblock %}
         </div>
     </div>
     {% include 'common/includes/footer.html' %}
     <script src="{% static 'index.js' %}"></script>
+    {% block footer %} {% endblock %}
   </body>
 </html>
