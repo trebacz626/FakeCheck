@@ -15,21 +15,32 @@ from django.contrib.auth import views as auth_views
 class ExpertListView(LoginRequiredMixin, generic.ListView):
     model = models.Expert
     form_class = forms.ExpertForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
 
 
 class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Expert
     form_class = forms.ExpertForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
 
 
 class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
     form_class = forms.RedactorForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
 
 
 class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
@@ -209,6 +220,8 @@ class QuestionForExpertListView(generic.ListView):
 
 
 class QuestionForExpertCreateView(LoginRequiredMixin, IsRedactorMixin, View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
 
     def get(self, request):
         return render(request, 'fakechecker/question_for_expert_form.html', {
@@ -246,6 +259,8 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
                                   IsRedactorQuestionsAuthorMixin,
                                   IsNumberOfReviewsExceededMixin,
                                   View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
 
     def get(self, request, **kwargs):
         object = get_object_or_404(models.QuestionForExpert, pk=kwargs['pk'])
