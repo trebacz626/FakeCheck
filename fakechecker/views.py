@@ -134,6 +134,7 @@ def QuestionFromUserCreateView(request):
 class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
+    pk_url_kwarg = "pk"
     template_name = 'fakechecker/question_from_user_detail.html'
 
 
