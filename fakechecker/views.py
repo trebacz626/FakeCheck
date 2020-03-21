@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
@@ -11,23 +11,8 @@ from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberO
     HasExpertAddedReviewMixin, IsExpertMixin
 from django.contrib.auth import views as auth_views
 
-def superuser_required():
-    def wrapper(wrapped):
-        class WrappedClass(UserPassesTestMixin, wrapped):
-            def test_func(self):
-                return self.request.user.is_superuser
-
-        return WrappedClass
-    return wrapper
-
 
 class ExpertListView(LoginRequiredMixin, generic.ListView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-
-
-@superuser_required()
-class ExpertCreateView(generic.CreateView):
     model = models.Expert
     form_class = forms.ExpertForm
 
@@ -37,34 +22,14 @@ class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
     form_class = forms.ExpertForm
 
 
-@superuser_required()
-class ExpertUpdateView(generic.UpdateView):
-    model = models.Expert
-    form_class = forms.ExpertForm
-    pk_url_kwarg = "pk"
-
-
 class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
     form_class = forms.RedactorForm
 
 
-@superuser_required()
-class RedactorCreateView(generic.CreateView):
+class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
     model = models.Redactor
     form_class = forms.RedactorForm
-
-
-class RedactorDetailView(generic.DetailView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
-
-
-@superuser_required()
-class RedactorUpdateView(generic.UpdateView):
-    model = models.Redactor
-    form_class = forms.RedactorForm
-    pk_url_kwarg = "pk"
 
 
 class QuestionCollectionListView(generic.ListView):
@@ -113,11 +78,6 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
         return super().form_invalid(form)
 
 
-class ReviewDetailView(generic.DetailView):
-    model = models.Review
-    form_class = forms.ReviewForm
-
-
 class ReviewUpdateView(generic.UpdateView):
     model = models.Review
     form_class = forms.ReviewForm
@@ -145,7 +105,7 @@ class CategoryUpdateView(generic.UpdateView):
     pk_url_kwarg = "pk"
 
 
-class QuestionFromUserListView(generic.ListView):
+class QuestionFromUserListView(IsRedactorMixin, generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_list.html'
@@ -183,6 +143,7 @@ class QuestionFromUserListView(generic.ListView):
         context['orders'] = ('Od najnowszego', 'Od najstarszego')
         context['is_read'] = ('Wszystkie', 'Tylko nowe', 'Tylko przeczytane')
         context['categories'] = models.Category.objects.all()
+        context['question_collections'] = models.QuestionCollection.objects.filter(redactor=self.request.user.redactor)
         return context
 
 

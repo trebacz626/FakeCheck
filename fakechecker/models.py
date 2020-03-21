@@ -50,7 +50,7 @@ class Redactor(models.Model):
 
 class QuestionCollection(models.Model):
     # Relationships
-    questions_from_user = models.ManyToManyField("fakechecker.QuestionFromUser")
+    questions_from_user = models.ManyToManyField("fakechecker.QuestionFromUser", blank=True)
     redactor = models.ForeignKey("fakechecker.Redactor", on_delete=models.CASCADE)
 
     # Fields
@@ -62,6 +62,9 @@ class QuestionCollection(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    def questions_from_user_list(self):
+        return ", ".join([question.title for question in self.questions_from_user.all()])
 
     def get_absolute_url(self):
         return reverse("QuestionCollection_detail", args=(self.pk,))
@@ -160,6 +163,9 @@ class QuestionFromUser(Question):
     def get_update_url(self):
         return reverse("QuestionFromUser_update", args=(self.pk,))
 
+    def is_for_expert(self):
+        return True
+
 
 class QuestionForExpert(Question):
     # Fields
@@ -196,3 +202,6 @@ class QuestionForExpert(Question):
 
     def increment_view(self):
         QuestionForExpert.objects.filter(id=self.id).update(views=F('views') + 1)
+
+    def is_for_expert(self):
+        return True

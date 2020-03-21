@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, redirect
 
 from FakeCheck import settings
 from FakeCheck.settings import MIN_REVIEWS_FOR_PUBLIC_QUESTION
-from .models import Redactor, Expert, QuestionForExpert, Review
+from .models import Redactor, Expert, QuestionForExpert, Review, QuestionCollection
+from django.http import JsonResponse
 
 
 class PermissionMessages:
@@ -48,6 +49,19 @@ class IsRedactorQuestionsAuthorMixin(AccessMixin):
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
+class IsRedactorQuestionCollectionAuthorJSON(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        no_permission = True
+        question_collecion = get_object_or_404(QuestionCollection, pk=kwargs['pk'])
+        question_redactor = question_collecion.redactor
+        try:
+            currently_logged_redactor = request.user.redactor
+            no_permission = currently_logged_redactor is question_redactor
+        except Redactor.DoesNotExist:
+            pass
+        if no_permission:
+            return JsonResponse({'status': 403, 'message': 'Forbidden'}, status=403)
+        return super().dispatch(request, *args, **kwargs)
 
 class IsNumberOfReviewsExceededMixin(AccessMixin):
     permission_denied_message = "Nie możesz zmienić tego pytania ponieważ liczba recenzji które otrzymało jest zbyt duża!"

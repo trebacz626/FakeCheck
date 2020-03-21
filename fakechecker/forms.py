@@ -1,6 +1,8 @@
 from django import forms
 from . import models
 from .validators import validate_curse_pl
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 
 class ExpertForm(forms.ModelForm):
@@ -27,8 +29,7 @@ class QuestionCollectionForm(forms.ModelForm):
     class Meta:
         model = models.QuestionCollection
         fields = [
-            "name",
-            "questions_from_user",
+            "name"
         ]
 
 
@@ -73,6 +74,7 @@ class QuestionForm(forms.ModelForm):
 
 
 class QuestionFromUserForm(forms.ModelForm):
+    captcha = ReCaptchaField(widget=ReCaptchaWidget())
     class Meta:
         model = models.QuestionFromUser
         fields = [

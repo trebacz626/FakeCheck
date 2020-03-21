@@ -3,16 +3,36 @@
 {% load static %}
 {% block content %}
     
-<p>
-    <a class="btn btn-light" href="{% url 'QuestionCollection_list' %}">
-    QuestionCollection Listing
-    </a>
-</p>
-    
-<table class="table">
-    <tr><td>name</td><td>{{ object.name }}</td></tr>
-    <tr><td>created</td><td>{{ object.created }}</td></tr>
-</table>
-<a class="btn btn-outline-dark" href="{{object.get_update_url}}">Edit</a>
+<div class="row">
+  <label class="col-sm-12"><strong>Nazwa:</strong></label>
+  <p class="col-sm-12">{{object.name}}</p>
+  <label class="col-sm-12"><strong>Utworzone:</strong></label>
+  <p class="col-sm-12">{{object.created}}</p>
+</div>
+{% if object.questions_from_user.all%}
+    <p>Pytania:</p><br>
+    {% for question in object.questions_from_user.all%}
+        <div class="border hover-dark p-3 m-1 row">
+            <div class="col-12 col-md-8">
+                <a href="{{question.get_absolute_url}}" class="no-decoration">
+                    <p class="h5 text-muted">{{question.title}}</p>
+                </a>
+                {% for category in question.categories.all %}
+                    <a href="" class="badge badge-dark p-1 mr-1">
+                        {% if category.fa_icon_class %}
+                            <i class="{{ category.fa_icon_class }}"></i>
+                        {% endif %}
+                        {{ category }}
+                    </a>
+                {% endfor %}
+                <span class="text-muted">{{ question.created|date }}</span>
+            </div>
+        </div>
+    {% empty %}
+        <div class="border p-3 m-1 row">
+            <h3 class="col-12 text-center">Brak pytań w kolekcji.</h3>
+        </div>
+    {% endfor%}
+{% endif %}
 
 {% endblock %}

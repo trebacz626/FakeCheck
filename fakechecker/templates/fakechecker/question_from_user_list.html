@@ -49,6 +49,12 @@
                         {{ category }}
                     </a>
                 {% endfor %}
+                {% if object.is_read %}
+                    <a class="badge badge-success p-2 m-1">Przetworzono</a>
+                {% else %}
+                    <a class="badge badge-danger p-2 m-1">Nieprzetworzono</a>
+                {% endif %}
+
                 <span class="text-muted">{{ object.created|date }}</span>
             </div>
         </div>
@@ -57,4 +63,5 @@
             <h3 class="col-12 text-center">Brak pytań spełniających kryteria...</h3>
         </div>
     {% endfor %}
+    </div>
 {% endblock %}
