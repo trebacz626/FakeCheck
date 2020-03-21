@@ -76,6 +76,6 @@ class IsNumberOfReviewsExceededMixin(AccessMixin):
 class HasExpertAddedReviewMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         self.question_for_expert = get_object_or_404(QuestionForExpert, id=self.kwargs['question_for_expert_id'])
-        if Review.objects.filter(expert=self.expert, question_for_expert=self.question_for_expert).first():
+        if Review.objects.filter(expert=self.request.user.expert, question_for_expert=self.question_for_expert).first():
             return redirect(self.question_for_expert.get_absolute_url())
         return super().dispatch(request, *args, **kwargs)

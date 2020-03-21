@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.urls import reverse
 from django.views import generic, View
 from . import models
 from . import forms
@@ -34,17 +35,22 @@ class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
     model = models.Review
     form_class = forms.ReviewForm
+    template_name = 'fakechecker/review_create.html'
+
+    def get_success_url(self):
+        return reverse('QuestionForExpert_detail', kwargs={'pk': self.kwargs['question_for_expert_id']})
 
     def get_context_data(self, **kwargs):
+        print(self.request)
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
-        context['question_for_expert'] = self.question_for_expert
+        context['question_for_expert'] = get_object_or_404(models.QuestionForExpert, pk=self.kwargs['question_for_expert_id'])
         return context
 
     def form_valid(self, form, *args, **kwargs):
         question_for_expert = get_object_or_404(models.QuestionForExpert, id=self.kwargs['question_for_expert_id'])
         self.object = form.save(commit=False)
         self.object.question_for_expert = question_for_expert
-        self.object.expert = self.expert
+        self.object.expert = self.request.user.expert
         self.object.save()
         return super().form_valid(form)
 
