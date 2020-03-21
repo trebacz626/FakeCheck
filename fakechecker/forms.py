@@ -28,8 +28,7 @@ class QuestionCollectionForm(forms.ModelForm):
     class Meta:
         model = models.QuestionCollection
         fields = [
-            "name",
-            "questions_from_user",
+            "name"
         ]
 
 
