@@ -21,10 +21,10 @@ class Expert(models.Model):
         return self.user.get_full_name()
 
     def get_absolute_url(self):
-        return reverse("fakechecker_Expert_detail", args=(self.pk,))
+        return reverse("Expert_detail", args=(self.pk,))
 
     def get_update_url(self):
-        return reverse("fakechecker_Expert_update", args=(self.pk,))
+        return reverse("Expert_update", args=(self.pk,))
 
 
 class Redactor(models.Model):
@@ -42,10 +42,10 @@ class Redactor(models.Model):
         return self.user.get_full_name()
 
     def get_absolute_url(self):
-        return reverse("fakechecker_Redactor_detail", args=(self.pk,))
+        return reverse("Redactor_detail", args=(self.pk,))
 
     def get_update_url(self):
-        return reverse("fakechecker_Redactor_update", args=(self.pk,))
+        return reverse("Redactor_update", args=(self.pk,))
 
 
 class QuestionCollection(models.Model):
@@ -64,10 +64,10 @@ class QuestionCollection(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse("fakechecker_QuestionCollection_detail", args=(self.pk,))
+        return reverse("QuestionCollection_detail", args=(self.pk,))
 
     def get_update_url(self):
-        return reverse("fakechecker_QuestionCollection_update", args=(self.pk,))
+        return reverse("QuestionCollection_update", args=(self.pk,))
 
 
 class Review(models.Model):
@@ -93,11 +93,8 @@ class Review(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def get_absolute_url(self):
-        return reverse("fakechecker_Review_detail", args=(self.pk,))
-
     def get_update_url(self):
-        return reverse("fakechecker_Review_update", args=(self.pk,))
+        return reverse("Review_update", args=(self.pk,))
 
     def list_of_sources(self):
         return self.sources.split(self.DELIMITER)
@@ -115,10 +112,10 @@ class Category(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse("fakechecker_Category_detail", args=(self.name,))
+        return reverse("Category_detail", args=(self.name,))
 
     def get_update_url(self):
-        return reverse("fakechecker_Category_update", args=(self.name,))
+        return reverse("Category_update", args=(self.name,))
 
 
 class Question(models.Model):
@@ -143,12 +140,6 @@ class Question(models.Model):
     def categories_list(self):
         return ", ".join([category.name for category in self.categories.all()])
 
-    def get_absolute_url(self):
-        return reverse("fakechecker_Question_detail", args=(self.pk,))
-
-    def get_update_url(self):
-        return reverse("fakechecker_Question_update", args=(self.pk,))
-
     def list_of_sources(self):
         return self.sources.split(self.DELIMITER)
 
@@ -164,10 +155,10 @@ class QuestionFromUser(Question):
         return str(self.title)
 
     def get_absolute_url(self):
-        return reverse("fakechecker_QuestionFromUser_detail", args=(self.pk,))
+        return reverse("QuestionFromUser_detail", args=(self.pk,))
 
     def get_update_url(self):
-        return reverse("fakechecker_QuestionFromUser_update", args=(self.pk,))
+        return reverse("QuestionFromUser_update", args=(self.pk,))
 
 
 class QuestionForExpert(Question):
@@ -184,10 +175,10 @@ class QuestionForExpert(Question):
         return str(self.title)
 
     def get_absolute_url(self):
-        return reverse("fakechecker_QuestionForExpert_detail", args=(self.pk,))
+        return reverse("QuestionForExpert_detail", args=(self.pk,))
 
     def get_update_url(self):
-        return reverse("fakechecker_QuestionForExpert_update", args=(self.pk,))
+        return reverse("QuestionForExpert_update", args=(self.pk,))
 
     def get_fake_number(self):
         return self.review_set.filter(is_info_fake=True).count()

@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.views import generic, View
 from django.contrib.auth.decorators import login_required
@@ -77,11 +79,6 @@ class QuestionCollectionUpdateView(generic.UpdateView):
     form_class = forms.QuestionCollectionForm
     template_name = 'fakechecker/question_collection_form.html'
     pk_url_kwarg = "pk"
-
-
-class ReviewListView(generic.ListView):
-    model = models.Review
-    form_class = forms.ReviewForm
 
 
 class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
@@ -259,13 +256,21 @@ class QuestionForExpertCreateView(LoginRequiredMixin, IsRedactorMixin, View):
         )
         expert_question.save()
         expert_question.categories.set(request.POST.getlist('categories'))
-        return redirect("fakechecker_QuestionForExpert_list")
+        return redirect("QuestionForExpert_list")
 
 
 class QuestionForExpertDetailView(generic.DetailView):
     model = models.QuestionForExpert
     form_class = forms.QuestionForExpertForm
     template_name = 'fakechecker/question_for_expert_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionForExpertDetailView, self).get_context_data(**kwargs)
+        try:
+            context['expert_posted'] = context['object'].review_set.filter(expert_id=self.request.user.expert).count()
+        except:
+            context['expert_posted'] = 0
+        return context
 
 
 class QuestionForExpertUpdateView(LoginRequiredMixin,
@@ -292,7 +297,7 @@ class QuestionForExpertUpdateView(LoginRequiredMixin,
         expert_question.sources = request.POST.get('sources')
         expert_question.save()
         expert_question.categories.set(request.POST.getlist('categories'))
-        return redirect("fakechecker_QuestionForExpert_list")
+        return redirect("QuestionForExpert_list")
 
 
 class LoginView(auth_views.LoginView):
@@ -301,3 +306,11 @@ class LoginView(auth_views.LoginView):
 
 class LogoutView(auth_views.LogoutView):
     template_name = "fakechecker/logout.html"
+
+    def get_next_page(self):
+        next_page = super(LogoutView, self).get_next_page()
+        messages.add_message(
+            self.request, messages.SUCCESS,
+            'You successfully log out!'
+        )
+        return next_page

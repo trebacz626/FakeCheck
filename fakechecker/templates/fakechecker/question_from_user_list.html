@@ -3,7 +3,7 @@
 {% block content %}
     <div class="card row m-2 mt-4">
         <p class="text-muted pt-2 pl-3 h5">Sortowanie i filtry:</p>
-        <form method="get" action="{% url 'fakechecker_QuestionFromUser_list' %}" class="input-group">
+        <form method="get" action="{% url 'QuestionFromUser_list' %}" class="input-group">
             <div class="col-12 col-sm-3 mb-2">
                 <input type="text" name="title" class="form-control" placeholder="Tytuł..." value="{{ title }}">
             </div>
@@ -42,7 +42,7 @@
                     <p class="h5 text-muted">{{object.title}}</p>
                 </a>
                 {% for category in object.categories.all %}
-                    <a href="" class="badge badge-dark p-1 mr-1">
+                    <a href="{{ category.get_absolute_url }}" class="badge badge-dark p-1 mr-1">
                         {% if category.fa_icon_class %}
                             <i class="{{ category.fa_icon_class }}"></i>
                         {% endif %}
@@ -57,6 +57,4 @@
             <h3 class="col-12 text-center">Brak pytań spełniających kryteria...</h3>
         </div>
     {% endfor %}
-    <div><a class="btn btn-outline-dark" href="{% url 'fakechecker_QuestionFromUser_create' %}">Create a new QuestionFromUser</a></div>
-    </div>
 {% endblock %}
