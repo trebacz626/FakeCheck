@@ -92,13 +92,7 @@ class QuestionFromUserForm(forms.ModelForm):
 
     def clean_sources(self):
         sources = self.cleaned_data.get('sources')
-        if (sources.count(' /') > 0 or sources.count('/ ') > 0 or sources.count('i ') > 0 or sources.count(
-                ' i') > 0) or (
-                len(sources) > 0 and (
-                sources.count('.') == 0 or (sources.count(' ') > 0 and sources.count(',') == 0))):
-            raise forms.ValidationError('Zła forma wysłania linków.')
-        else:
-            return sources
+        return sources.replace(" ","")
 
 
 class QuestionForExpertForm(forms.ModelForm):
