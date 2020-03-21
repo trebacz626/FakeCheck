@@ -1,4 +1,3 @@
-{% load recaptcha2 %}
 {% load static %}
 <html>
   <head>
@@ -9,7 +8,6 @@
     <script>
         const csrf = '{{ csrf_token }}';
     </script>
-  {% recaptcha_init 'en' %}
   </head>
   <body>
     {% include 'common/includes/navbar.html' %}
