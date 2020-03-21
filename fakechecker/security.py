@@ -52,14 +52,14 @@ class IsRedactorQuestionsAuthorMixin(AccessMixin):
 class IsRedactorQuestionCollectionAuthorJSON(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         no_permission = True
-        question_collecion = get_object_or_404(QuestionCollection, pk=kwargs['pk'])
-        question_redactor = question_collecion.redactor
+        question_collection = get_object_or_404(QuestionCollection, pk=kwargs['pk'])
+        question_collection_redactor = question_collection.redactor
         try:
             currently_logged_redactor = request.user.redactor
-            no_permission = currently_logged_redactor is question_redactor
+            permission = currently_logged_redactor.id is question_collection_redactor.id
         except Redactor.DoesNotExist:
             pass
-        if no_permission:
+        if not permission:
             return JsonResponse({'status': 403, 'message': 'Forbidden'}, status=403)
         return super().dispatch(request, *args, **kwargs)
 

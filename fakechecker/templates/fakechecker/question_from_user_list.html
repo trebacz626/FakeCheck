@@ -37,7 +37,7 @@
     <div class="p-1">
     {% for object in object_list %}
         <div class="border hover-dark p-3 m-1 row">
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-10">
                 <a href="{{object.get_absolute_url}}" class="no-decoration">
                     <p class="h5 text-muted">{{object.title}}</p>
                 </a>
@@ -56,6 +56,15 @@
                 {% endif %}
 
                 <span class="text-muted">{{ object.created|date }}</span>
+                <div>Kolekcja pytań:
+                <select class="selectpicker q-collection" multiple data-live-search="true">
+                    {% for question_collection in question_collections%}
+                        <option {% if object in question_collection.questions_from_user.all%}selected=""{%endif%}data-id="{{question_collection.id}}" data-questionid="{{object.id}}">{{question_collection.name}}</option>
+                    {%endfor%}
+                </select>
+                <button data-questionid="{{object.id}}" class = "btn btn-outline-dark new-collection">Nowa Kolekcja</button>
+                </div>
+                
             </div>
         </div>
     {% empty %}
@@ -65,3 +74,6 @@
     {% endfor %}
     </div>
 {% endblock %}
+{% block footer%}
+<script src="/static/question_from_user_list.js"></script>
+{%endblock%}

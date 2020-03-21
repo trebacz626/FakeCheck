@@ -58,6 +58,7 @@ class ExpertDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
+
 class RedactorListView(LoginRequiredMixin, generic.ListView):
     model = models.Redactor
     form_class = forms.RedactorForm
@@ -80,6 +81,7 @@ class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
             'Od najnowszego', 'Od najstarszego', 'Najpopularniejsze', 'Najmniej popularne', 'Najbardziej oceniane',
             'Najmniej oceniane')
         context['categories'] = models.Category.objects.all()
+        context['question_collections'] = models.QuestionCollection.objects.filter(redactor=self.request.user.redactor)
 
         new_context = models.QuestionForExpert.objects.filter(redactor=self.kwargs['pk'])
         if context['prev_category'] != '':
@@ -111,7 +113,6 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
         return reverse('QuestionForExpert_detail', kwargs={'pk': self.kwargs['question_for_expert_id']})
 
     def get_context_data(self, **kwargs):
-        print(self.request)
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
         context['question_for_expert'] = get_object_or_404(models.QuestionForExpert,
                                                            pk=self.kwargs['question_for_expert_id'])
