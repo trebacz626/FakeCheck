@@ -37,7 +37,7 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
 
     def get_context_data(self, **kwargs):
         context = super(ReviewCreateView, self).get_context_data(**kwargs)
-        context['question_for_expert'] = self.question_for_expert
+        context['question_for_expert'] = self.question_for_expert.all
         return context
 
     def form_valid(self, form, *args, **kwargs):

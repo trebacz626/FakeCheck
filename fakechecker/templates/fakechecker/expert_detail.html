@@ -8,12 +8,15 @@
     Expert Listing
     </a>
 </p>
-    
-<table class="table">
-    <tr><td>last_updated</td><td>{{ object.last_updated }}</td></tr>
-    <tr><td>profile_pic</td><td>{{ object.profile_pic }}</td></tr>
-    <tr><td>about</td><td>{{ object.about }}</td></tr>
-    <tr><td>created</td><td>{{ object.created }}</td></tr>
-</table>
+
+    <div style="text-align: center; width: 100vw;
+    vertical-align: middle; height: 50vh; display:table-cell;">
+    <b>Użytkownik:</b> {{ object.user.get_full_name }} <br>
+    <b>Zdjęcie użytkownika: </b> {{ object.profile_pic }} <br>
+    <b>O użytkowniku: </b> {{ object.about }} <br>
+    <b>Email:</b> {{ object.user.email }} <br><br>
+    <b>Użytkownik stworzony:</b> {{ object.created }}<br>
+    </div>
+
 
 {% endblock %}
