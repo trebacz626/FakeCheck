@@ -28,7 +28,7 @@
         </form>
     </div>
     <div class="p-1">
-    {% if user.redactor or user.is_superuser %}
+    {% if user.redactor %}
         <a class="btn btn-outline-dark w-100 mb-2" href="{% url 'QuestionForExpert_create' %}">Utwórz nowe pytanie dla eksperta</a>
     {% endif %}
     {% for object in object_list %}

@@ -5,13 +5,13 @@
 <h3><strong>Pytanie:</strong></h3>
 <div class="row">
   <label class="col-sm-12"><strong>Tytuł:</strong></label>
-  <p class="col-sm-12">{{question_for_expert.title}}</p>
+  <p class="col-sm-12">{{object.question_for_expert.title}}</p>
   <label class="col-sm-12"><strong>Treść:</strong></label>
-  <p class="col-sm-12">{{question_for_expert.content}}</p>
+  <p class="col-sm-12">{{object.question_for_expert.content}}</p>
   <label class="col-sm-12"><strong>Utworzone:</strong></label>
-  <p class="col-sm-12">{{question_for_expert.created}}</p>
+  <p class="col-sm-12">{{object.question_for_expert.created}}</p>
   <label class="col-sm-12"><strong>Żródła:</strong></label>
-  <p class="col-sm-12">{{question_for_expert.sources}}</p>
+  <p class="col-sm-12">{{object.question_for_expert.sources}}</p>
 </div>
 <h3><strong>Twoja recenzja:</strong></h3>
 <form method="post">
@@ -24,7 +24,7 @@
   <br>
   Linki oddzielaj ",", na przykład "https://fake-check.akai.org.pl/, https://www.hackcrisis.com/".
   <br>
-  <input type="submit" value="Save" class="btn btn-outline-dark">
+  <input type="submit" value="Dodaj pytanie" class="btn btn-outline-dark w-100">
 </form>
 
 {% endblock %}
