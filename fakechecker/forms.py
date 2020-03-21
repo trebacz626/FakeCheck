@@ -79,6 +79,16 @@ class QuestionFromUserForm(forms.ModelForm):
             "categories",
             "sources",
         ]
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'rows': 8,
+                'style': 'resize: none;',
+            }),
+            'sources': forms.Textarea(attrs={
+                'rows': 3,
+                'style': 'resize: none;'
+            }),
+        }
 
     def clean_sources(self):
         sources = self.cleaned_data.get('sources')
