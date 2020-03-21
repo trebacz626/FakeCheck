@@ -5,8 +5,8 @@
 
 <form method="post">
     {% csrf_token %}
-    <div class="container">
-        <h3>Logowanie</h3>
+    <div class="container" class="mt-2">
+        <h3 >Logowanie</h3>
         {{ form|crispy }}
         <input type="submit" value="Zalgouj" class="btn btn-outline-dark">
     </div>

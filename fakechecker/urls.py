@@ -13,6 +13,7 @@ urlpatterns = (
 
     # Experts
     path("expert/", views.ExpertListView.as_view(), name="Expert_list"),
+    path("expert/how_to_be/", views.ExpertHowToBe, name="Expert_how_to_be"),
     path("expert/detail/<int:pk>/", views.ExpertDetailView.as_view(), name="Expert_detail"),
 
 
@@ -39,7 +40,7 @@ urlpatterns = (
 
     # Questions from users
     path("question/asked/", views.QuestionFromUserListView.as_view(), name="QuestionFromUser_list"),
-    path("question/asked/create/", views.QuestionFromUserCreateView, name="QuestionFromUser_create"),
+    path("question/asked/create/", views.QuestionFromUserCreateView.as_view(), name="QuestionFromUser_create"),
     path("question/asked/detail/<int:pk>/", views.QuestionFromUserDetailView.as_view(), name="QuestionFromUser_detail"),
 
     # Questions for Experts
