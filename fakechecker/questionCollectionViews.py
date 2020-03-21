@@ -29,7 +29,7 @@ class QuestionCollectionCreateView(IsRedactorMixin, View):
             question_collection.save()
             return JsonResponse({'message': 'success', 'collection_id':question_collection.pk})
         else:
-            return JsonResponse({'error':'please provide valid qyestion collection name'})
+            return JsonResponse({'error':'please provide valid qyestion collection name'},status=500)
     def get(self, request):
         return render(request, 'fakechecker/question_collection_form.html', {
             'question_for_expert_form': forms.QuestionForExpertForm,
