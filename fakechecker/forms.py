@@ -23,10 +23,13 @@ class ReviewForm(forms.ModelForm):
             "justification",
             "sources",
         ]
+        widgets = {
+            'is_info_fake': forms.RadioSelect
+        }
         exclude = ['created', 'last_updated']
         labels = {
             'justification': 'Argumentacja',
-            'is_info_fake': 'Czy informacja jest prawdziwa?',
+            'is_info_fake': 'Czy informacja jest fałszywa?',
             'sources': 'Źródła (linki w oddzielnych liniach)',
         }
 
