@@ -7,7 +7,7 @@ from . import models
 from . import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from .security import IsRedactorMixin, IsRedactorQuestionsAuthorMixin, IsNumberOfReviewsExceededMixin, \
-    HasExpertAddedReviewMixin, IsExpertMixin
+    HasExpertAddedReviewMixin, IsExpertMixin,IsExpertAuthorOfReviewMixin
 from django.contrib.auth import views as auth_views
 
 
@@ -76,7 +76,6 @@ class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
             'Od najnowszego', 'Od najstarszego', 'Najpopularniejsze', 'Najmniej popularne', 'Najbardziej oceniane',
             'Najmniej oceniane')
         context['categories'] = models.Category.objects.all()
-        context['question_collections'] = models.QuestionCollection.objects.filter(redactor=self.request.user.redactor)
 
         new_context = models.QuestionForExpert.objects.filter(redactor=self.kwargs['pk'])
         if context['prev_category'] != '':
@@ -99,7 +98,7 @@ class RedactorDetailView(LoginRequiredMixin, generic.DetailView):
         return context
 
 
-class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
+class ReviewCreateView(LoginRequiredMixin,IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateView):
     model = models.Review
     form_class = forms.ReviewForm
     template_name = 'fakechecker/review_create.html'
@@ -125,18 +124,25 @@ class ReviewCreateView(IsExpertMixin, HasExpertAddedReviewMixin, generic.CreateV
         return super().form_invalid(form)
 
 
-class ReviewUpdateView(generic.UpdateView):
+class ReviewUpdateView(LoginRequiredMixin,
+                       IsExpertMixin,
+                       IsExpertAuthorOfReviewMixin,
+                       generic.UpdateView):
     model = models.Review
     form_class = forms.ReviewForm
     pk_url_kwarg = "pk"
 
 
-class CategoryListView(IsRedactorMixin, generic.ListView):
+class CategoryListView(LoginRequiredMixin,
+                       IsRedactorMixin,
+                       generic.ListView):
     model = models.Category
     form_class = forms.CategoryForm
 
 
-class CategoryCreateView(IsRedactorMixin, generic.CreateView):
+class CategoryCreateView(LoginRequiredMixin,
+                         IsRedactorMixin,
+                         generic.CreateView):
     model = models.Category
     form_class = forms.CategoryForm
 
@@ -165,13 +171,17 @@ class CategoryDetailView(generic.DetailView):
         return context
 
 
-class CategoryUpdateView(IsRedactorMixin, generic.UpdateView):
+class CategoryUpdateView(LoginRequiredMixin,
+                         IsRedactorMixin,
+                         generic.UpdateView):
     model = models.Category
     form_class = forms.CategoryForm
     pk_url_kwarg = "pk"
 
 
-class QuestionFromUserListView(IsRedactorMixin, generic.ListView):
+class QuestionFromUserListView(LoginRequiredMixin,
+                               IsRedactorMixin,
+                               generic.ListView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_list.html'
@@ -219,7 +229,9 @@ class QuestionFromUserCreateView(generic.CreateView):
     template_name = 'fakechecker/question_from_user_form.html'
 
 
-class QuestionFromUserDetailView(generic.DetailView):
+class QuestionFromUserDetailView(LoginRequiredMixin,
+                                 IsRedactorMixin,
+                                 generic.DetailView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     pk_url_kwarg = "pk"
