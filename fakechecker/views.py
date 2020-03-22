@@ -229,9 +229,7 @@ class QuestionFromUserCreateView(generic.CreateView):
     template_name = 'fakechecker/question_from_user_form.html'
 
 
-class QuestionFromUserDetailView(LoginRequiredMixin,
-                                 IsRedactorMixin,
-                                 generic.DetailView):
+class QuestionFromUserDetailView(generic.DetailView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     pk_url_kwarg = "pk"
