@@ -227,12 +227,6 @@ class QuestionFromUserCreateView(generic.CreateView):
     model = models.QuestionFromUser
     form_class = forms.QuestionFromUserForm
     template_name = 'fakechecker/question_from_user_form.html'
-    def form_valid(self, form):
-        print('valid')
-        return super().form_valid(form)
-    def form_invalid(self, form):
-        print('invalid')
-        return super().form_invalid(form)
 
 
 class QuestionFromUserDetailView(generic.DetailView):
